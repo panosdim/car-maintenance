@@ -3,11 +3,16 @@ package com.panosdim.carmaintenance
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.panosdim.carmaintenance.ui.CarSelection
+import com.panosdim.carmaintenance.ui.SignOut
 import com.panosdim.carmaintenance.ui.theme.CarMaintenanceTheme
 
 class MainActivity : ComponentActivity() {
@@ -16,56 +21,18 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             CarMaintenanceTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxWidth(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
-                    CarSelection()
+                    Row(
+                        modifier = Modifier.padding(8.dp).height(IntrinsicSize.Min),
+                        horizontalArrangement = Arrangement.SpaceAround, verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        CarSelection()
+                        SignOut()
+                    }
                 }
-            }
-        }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CarSelection() {
-    val options = listOf("Option 1", "Option 2", "Option 3", "Option 4", "Option 5")
-    var expanded by remember { mutableStateOf(false) }
-    var selectedOptionText by remember { mutableStateOf(options[0]) }
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
-    ) {
-        TextField(
-            modifier = Modifier.menuAnchor(),
-            readOnly = true,
-            value = selectedOptionText,
-            onValueChange = {},
-            label = { Text("Car Selection") },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            colors = ExposedDropdownMenuDefaults.textFieldColors(),
-        )
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-        ) {
-            options.forEach { selectionOption ->
-                DropdownMenuItem(
-                    text = { Text(selectionOption) },
-                    onClick = {
-                        selectedOptionText = selectionOption
-                        expanded = false
-                    },
-                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                )
             }
         }
     }
@@ -75,7 +42,18 @@ fun CarSelection() {
 @Composable
 fun DefaultPreview() {
     CarMaintenanceTheme {
-        Greeting("Android")
-        CarSelection()
+        // A surface container using the 'background' color from the theme
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            Row(
+                modifier = Modifier.padding(8.dp).height(IntrinsicSize.Min),
+                horizontalArrangement = Arrangement.SpaceAround, verticalAlignment = Alignment.CenterVertically
+            ) {
+                CarSelection()
+                SignOut()
+            }
+        }
     }
 }
