@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -59,4 +60,17 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+
+    // Firebase Dependencies
+    implementation platform('com.google.firebase:firebase-bom:31.4.0')
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-storage-ktx'
+
+    // Firebase Auth UI
+    implementation 'com.firebaseui:firebase-ui-auth:8.0.1'
+    implementation 'com.google.android.gms:play-services-auth:20.4.1'
+
+    // Android Work
+    implementation 'androidx.work:work-runtime-ktx:2.8.1'
 }
