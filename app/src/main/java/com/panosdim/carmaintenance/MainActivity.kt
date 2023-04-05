@@ -3,6 +3,7 @@ package com.panosdim.carmaintenance
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -18,6 +19,7 @@ import com.panosdim.carmaintenance.ui.theme.CarMaintenanceTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val carsViewModel by viewModels<MainViewModel>()
 
         setContent {
             CarMaintenanceTheme {
@@ -26,10 +28,13 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Row(
-                        modifier = Modifier.padding(8.dp).height(IntrinsicSize.Min),
-                        horizontalArrangement = Arrangement.SpaceAround, verticalAlignment = Alignment.CenterVertically
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .height(IntrinsicSize.Min),
+                        horizontalArrangement = Arrangement.SpaceAround,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        CarSelection()
+                        CarSelection(carsViewModel)
                         SignOut()
                     }
                 }
@@ -41,6 +46,7 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
+    val carsViewModel = MainViewModel()
     CarMaintenanceTheme {
         // A surface container using the 'background' color from the theme
         Surface(
@@ -48,10 +54,13 @@ fun DefaultPreview() {
             color = MaterialTheme.colorScheme.background
         ) {
             Row(
-                modifier = Modifier.padding(8.dp).height(IntrinsicSize.Min),
-                horizontalArrangement = Arrangement.SpaceAround, verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier
+                    .padding(8.dp)
+                    .height(IntrinsicSize.Min),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                CarSelection()
+                CarSelection(carsViewModel)
                 SignOut()
             }
         }
