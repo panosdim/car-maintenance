@@ -1,11 +1,10 @@
 package com.panosdim.carmaintenance
 
+import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
-enum class MSG(val message: String) {
-    ITEM("com.panosdim.maintenance.item")
-}
+val padding = 8.dp
 
 var user = FirebaseAuth.getInstance().currentUser
 val database = FirebaseDatabase.getInstance()

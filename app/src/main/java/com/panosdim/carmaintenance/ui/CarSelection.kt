@@ -19,7 +19,7 @@ fun CarSelection(viewModel: MainViewModel) {
 
     if (options.value.isNotEmpty() && selectedOptionText.isBlank()) {
         selectedOptionText = options.value[0].name
-        viewModel.selectedCar = options.value[0]
+        viewModel.changeSelectedCar(options.value[0])
     }
 
     ExposedDropdownMenuBox(
@@ -44,7 +44,7 @@ fun CarSelection(viewModel: MainViewModel) {
                     text = { Text(selectionOption.name) },
                     onClick = {
                         selectedOptionText = selectionOption.name
-                        viewModel.selectedCar = selectionOption
+                        viewModel.changeSelectedCar(selectionOption)
                         expanded = false
                     },
                     contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
