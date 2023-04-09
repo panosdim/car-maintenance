@@ -14,6 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.firebase.FirebaseApp
 import com.panosdim.carmaintenance.model.Car
 import com.panosdim.carmaintenance.model.Service
 import com.panosdim.carmaintenance.ui.CarDetails
@@ -26,8 +28,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val viewModel by viewModels<MainViewModel>()
 
+        // Initialize Firebase
+        FirebaseApp.initializeApp(this)
+
         setContent {
             val selectedCar by viewModel.selectedCar.collectAsState()
+            val options = viewModel.cars.collectAsStateWithLifecycle(initialValue = emptyList())
 
             CarMaintenanceTheme {
                 Surface(
@@ -46,7 +52,11 @@ class MainActivity : ComponentActivity() {
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            CarSelection(viewModel)
+                            CarSelection(
+                                options = options.value,
+                                addNewCar = { viewModel.addNewCar(it) },
+                                changeSelectedCar = { viewModel.changeSelectedCar(it) }
+                            )
                             SignOut()
                         }
                         Spacer(Modifier.size(padding))
@@ -61,13 +71,27 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    val carsViewModel = MainViewModel()
     val padding = 8.dp
 
     val selectedCar = Car(
         name = "Test Car",
         service = Service(date = "03-04-2023", odometer = "150.000km", nextService = "175.000km")
     )
+
+    val options =
+        listOf(
+            Car(
+                id = "1",
+                name = "Opel Corsa",
+                service = Service(date = "09-04-2023", "213.000km", "235.000km")
+            ),
+            Car(
+                id = "2",
+                name = "Opel Crossland",
+                service = Service(date = "01-03-2023", "85.000km", "95.000km")
+            )
+        )
+
 
     CarMaintenanceTheme {
         Surface(
@@ -86,7 +110,10 @@ fun DefaultPreview() {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    CarSelection(carsViewModel)
+                    CarSelection(
+                        options = options,
+                        changeSelectedCar = {  },
+                        addNewCar = {  })
                     SignOut()
                 }
                 Spacer(Modifier.size(padding))

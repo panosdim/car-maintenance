@@ -5,21 +5,25 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.panosdim.carmaintenance.MainViewModel
+import com.panosdim.carmaintenance.model.Car
+import com.panosdim.carmaintenance.model.Service
 import com.panosdim.carmaintenance.ui.theme.CarMaintenanceTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CarSelection(viewModel: MainViewModel) {
-    val options = viewModel.cars.collectAsStateWithLifecycle(initialValue = emptyList())
+fun CarSelection(
+    options: List<Car>,
+    changeSelectedCar: (car: Car) -> Unit,
+    addNewCar: (car: Car) -> Unit
+) {
+
     var expanded by rememberSaveable { mutableStateOf(false) }
     var selectedOptionText by rememberSaveable { mutableStateOf("") }
     var openDialog by rememberSaveable { mutableStateOf(false) }
 
-    if (options.value.isNotEmpty() && selectedOptionText.isBlank()) {
-        selectedOptionText = options.value[0].name
-        viewModel.changeSelectedCar(options.value[0])
+    if (options.isNotEmpty() && selectedOptionText.isBlank()) {
+        selectedOptionText = options[0].name
+        changeSelectedCar(options[0])
     }
 
     ExposedDropdownMenuBox(
@@ -39,12 +43,12 @@ fun CarSelection(viewModel: MainViewModel) {
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {
-            options.value.forEach { selectionOption ->
+            options.forEach { selectionOption ->
                 DropdownMenuItem(
                     text = { Text(selectionOption.name) },
                     onClick = {
                         selectedOptionText = selectionOption.name
-                        viewModel.changeSelectedCar(selectionOption)
+                        changeSelectedCar(selectionOption)
                         expanded = false
                     },
                     contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
@@ -65,15 +69,29 @@ fun CarSelection(viewModel: MainViewModel) {
     AddNewCarDialog(
         openDialog = openDialog,
         closeDialog = { openDialog = false },
-        viewModel = viewModel
+        addNewCar = { addNewCar(it) }
     )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun CarSelectionPreview() {
-    val carsViewModel = MainViewModel()
+    val options =
+        listOf(
+            Car(
+                id = "1",
+                name = "Opel Corsa",
+                service = Service(date = "09-04-2023", "213.000km", "235.000km")
+            ),
+            Car(
+                id = "2",
+                name = "Opel Crossland",
+                service = Service(date = "01-03-2023", "85.000km", "95.000km")
+            )
+        )
     CarMaintenanceTheme {
-        CarSelection(carsViewModel)
+        CarSelection(options = options,
+            changeSelectedCar = { },
+            addNewCar = { })
     }
 }

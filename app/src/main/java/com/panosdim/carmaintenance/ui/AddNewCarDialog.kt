@@ -13,7 +13,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.panosdim.carmaintenance.MainViewModel
 import com.panosdim.carmaintenance.model.Car
 import com.panosdim.carmaintenance.ui.theme.CarMaintenanceTheme
 import kotlinx.coroutines.job
@@ -22,7 +21,7 @@ import kotlinx.coroutines.job
 fun AddNewCarDialog(
     openDialog: Boolean,
     closeDialog: () -> Unit,
-    viewModel: MainViewModel
+    addNewCar: (car: Car) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -63,14 +62,14 @@ fun AddNewCarDialog(
                             val newCar = Car(
                                 name = carName,
                             )
-                            viewModel.addNewCar(newCar)
+                            addNewCar(newCar)
 
                             Toast.makeText(
                                 context, "New Car Added Successfully.",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
-                        
+
                         closeDialog()
                     }
                 ) {
@@ -95,8 +94,7 @@ fun AddNewCarDialog(
 @Preview(showBackground = true)
 @Composable
 fun AddNewCarDialogPreview() {
-    val carsViewModel = MainViewModel()
     CarMaintenanceTheme {
-        AddNewCarDialog(true, {}, carsViewModel)
+        AddNewCarDialog(true, {}, {})
     }
 }
