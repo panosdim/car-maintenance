@@ -1,16 +1,20 @@
 package com.panosdim.carmaintenance.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.panosdim.carmaintenance.TAG
 import com.panosdim.carmaintenance.model.Car
 import com.panosdim.carmaintenance.model.Service
 import com.panosdim.carmaintenance.ui.theme.CarMaintenanceTheme
 
 @Composable
 fun CarDetails(selectedCar: Car?) {
-    Column {
-        ServiceCard(selectedCar)
+    selectedCar?.let {
+        Column {
+            ServiceCard(it)
+        }
     }
 }
 

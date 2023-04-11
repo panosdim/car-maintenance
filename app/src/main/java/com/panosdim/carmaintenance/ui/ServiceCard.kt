@@ -5,7 +5,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,9 +18,11 @@ import com.panosdim.carmaintenance.ui.theme.CarMaintenanceTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ServiceCard(selectedCar: Car?) {
+fun ServiceCard(selectedCar: Car) {
+    var openDialog by rememberSaveable { mutableStateOf(false) }
+
     Card(
-        onClick = { /* Do something */ },
+        onClick = { openDialog = true },
         modifier = Modifier
             .fillMaxWidth()
     ) {
@@ -37,18 +40,14 @@ fun ServiceCard(selectedCar: Car?) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                selectedCar?.service?.let {
-                    Text(
-                        it.date,
-                        style = MaterialTheme.typography.headlineMedium
-                    )
-                }
-                selectedCar?.service?.let {
-                    Text(
-                        it.odometer,
-                        style = MaterialTheme.typography.headlineMedium
-                    )
-                }
+                Text(
+                    selectedCar.service.date,
+                    style = MaterialTheme.typography.headlineMedium
+                )
+                Text(
+                    selectedCar.service.odometer,
+                    style = MaterialTheme.typography.headlineMedium
+                )
             }
             Spacer(Modifier.padding(padding))
             Text(
@@ -57,14 +56,19 @@ fun ServiceCard(selectedCar: Car?) {
                 style = MaterialTheme.typography.displaySmall
             )
             Spacer(Modifier.padding(padding))
-            selectedCar?.service?.let {
-                Text(
-                    it.nextService,
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    style = MaterialTheme.typography.headlineMedium
-                )
-            }
+            Text(
+                selectedCar.service.nextService,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                style = MaterialTheme.typography.headlineMedium
+            )
         }
+
+        UpdateCarServiceDialog(
+            openDialog = openDialog,
+            closeDialog = { openDialog = false },
+            selectedCar = selectedCar
+        ) {}
+
     }
 }
 
