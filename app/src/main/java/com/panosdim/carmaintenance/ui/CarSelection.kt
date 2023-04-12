@@ -4,7 +4,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.panosdim.carmaintenance.R
 import com.panosdim.carmaintenance.model.Car
 import com.panosdim.carmaintenance.model.Service
 import com.panosdim.carmaintenance.ui.theme.CarMaintenanceTheme
@@ -30,12 +32,12 @@ fun CarSelection(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded },
     ) {
-        TextField(
+        OutlinedTextField(
             modifier = Modifier.menuAnchor(),
             readOnly = true,
             value = selectedOptionText,
             onValueChange = {},
-            label = { Text("Car Selection") },
+            label = { Text(text = stringResource(R.string.car_selection)) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
             colors = ExposedDropdownMenuDefaults.textFieldColors(),
         )
@@ -56,7 +58,7 @@ fun CarSelection(
             }
 
             DropdownMenuItem(
-                text = { Text("Add New Car") },
+                text = { Text(text = stringResource(R.string.add_new_car)) },
                 onClick = {
                     openDialog = true
                     expanded = false
