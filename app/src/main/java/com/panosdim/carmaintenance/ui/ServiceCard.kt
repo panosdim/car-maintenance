@@ -9,16 +9,19 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.panosdim.carmaintenance.R
 import com.panosdim.carmaintenance.model.Car
 import com.panosdim.carmaintenance.model.Service
 import com.panosdim.carmaintenance.padding
 import com.panosdim.carmaintenance.ui.theme.CarMaintenanceTheme
+import com.panosdim.carmaintenance.utils.getFormattedNumber
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ServiceCard(selectedCar: Car) {
+fun ServiceCard(selectedCar: Car, updateCarService: (car: Car) -> Unit) {
     var openDialog by rememberSaveable { mutableStateOf(false) }
 
     Card(
@@ -28,7 +31,7 @@ fun ServiceCard(selectedCar: Car) {
     ) {
         Column(modifier = Modifier.padding(padding)) {
             Text(
-                "Service",
+                text = stringResource(R.string.service),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.displayMedium
             )
@@ -45,19 +48,19 @@ fun ServiceCard(selectedCar: Car) {
                     style = MaterialTheme.typography.headlineMedium
                 )
                 Text(
-                    selectedCar.service.odometer,
+                    "${getFormattedNumber(selectedCar.service.odometer)} km",
                     style = MaterialTheme.typography.headlineMedium
                 )
             }
             Spacer(Modifier.padding(padding))
             Text(
-                "Next Service",
+                text = stringResource(R.string.next_service),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.displaySmall
             )
             Spacer(Modifier.padding(padding))
             Text(
-                selectedCar.service.nextService,
+                "${getFormattedNumber(selectedCar.service.nextService)} km",
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.headlineMedium
             )
@@ -67,7 +70,7 @@ fun ServiceCard(selectedCar: Car) {
             openDialog = openDialog,
             closeDialog = { openDialog = false },
             selectedCar = selectedCar
-        ) {}
+        ) { updateCarService(it) }
 
     }
 }
@@ -82,6 +85,6 @@ fun ServiceCardPreview() {
     )
 
     CarMaintenanceTheme {
-        ServiceCard(selectedCar)
+        ServiceCard(selectedCar) {}
     }
 }

@@ -3,15 +3,20 @@ package com.panosdim.carmaintenance.ui
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.panosdim.carmaintenance.model.Car
 import com.panosdim.carmaintenance.ui.theme.CarMaintenanceTheme
@@ -33,19 +38,21 @@ fun AddNewCarDialog(
             onDismissRequest = closeDialog,
             title = {
                 Text(
-                    text = "Add a new car"
+                    text = stringResource(com.panosdim.carmaintenance.R.string.car_add_title)
                 )
             },
             text = {
                 Column {
-                    TextField(
+                    OutlinedTextField(
                         value = carName,
                         onValueChange = { carName = it },
                         placeholder = {
                             Text(
-                                text = "Type the name of the new car"
+                                text = stringResource(com.panosdim.carmaintenance.R.string.car_name_placeholder)
                             )
                         },
+                        singleLine = true,
+                        label = { Text(text = stringResource(com.panosdim.carmaintenance.R.string.car_name)) },
                         modifier = Modifier.focusRequester(focusRequester)
                     )
                     LaunchedEffect(Unit) {
@@ -65,16 +72,17 @@ fun AddNewCarDialog(
                             addNewCar(newCar)
 
                             Toast.makeText(
-                                context, "New Car Added Successfully.",
+                                context, com.panosdim.carmaintenance.R.string.add_new_car_message,
                                 Toast.LENGTH_LONG
                             ).show()
                         }
 
                         closeDialog()
-                    }
+                    },
+                    enabled = carName.isNotBlank()
                 ) {
                     Text(
-                        text = "Add"
+                        text = stringResource(com.panosdim.carmaintenance.R.string.add)
                     )
                 }
             },
@@ -83,7 +91,7 @@ fun AddNewCarDialog(
                     onClick = closeDialog
                 ) {
                     Text(
-                        text = "Dismiss"
+                        text = stringResource(com.panosdim.carmaintenance.R.string.dismiss)
                     )
                 }
             }
