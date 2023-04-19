@@ -70,7 +70,7 @@ class MainActivity : ComponentActivity() {
                             SignOut()
                         }
                         Spacer(Modifier.size(padding))
-                        CarDetails(selectedCar) { viewModel.updateCarService(it) }
+                        CarDetails(selectedCar) { viewModel.updateCar(it) }
                     }
                 }
             }
@@ -85,7 +85,7 @@ fun DefaultPreview() {
 
     val selectedCar = Car(
         name = "Test Car",
-        service = Service(date = "03-04-2023", odometer = "150.000km", nextService = "175.000km")
+        service = Service(date = "03-04-2023", odometer = "150000", nextService = "175000")
     )
 
     val options =
@@ -93,12 +93,12 @@ fun DefaultPreview() {
             Car(
                 id = "1",
                 name = "Opel Corsa",
-                service = Service(date = "09-04-2023", "213.000km", "235.000km")
+                service = Service(date = "09-04-2023", "213000", "235000")
             ),
             Car(
                 id = "2",
                 name = "Opel Crossland",
-                service = Service(date = "01-03-2023", "85.000km", "95.000km")
+                service = Service(date = "01-03-2023", "85000", "95000")
             )
         )
 

@@ -23,4 +23,13 @@
     <string name="ok">OK</string>
     <string name="km">km</string>
     <string name="car_service_message">Car Service Updated Successfully</string>
+    <string name="tyres">Tyres</string>
+    <string name="next_change">Next Change</string>
+    <string name="car_tyres_title">Tyres</string>
+    <string name="car_tyres_date">Tyres Change Date</string>
+    <string name="car_tyres_placeholder">Type current tyres change odometer</string>
+    <string name="car_tyres_change">Tyres Change</string>
+    <string name="next_car_tyres_next_placeholder">Type next tyres change odometer</string>
+    <string name="next_car_tyres">Next Tyres Change</string>
+    <string name="car_tyres_message">Car Tyres Updated Successfully</string>
 </resources>

@@ -18,8 +18,8 @@ class MainViewModel : ViewModel() {
         repository.addNewCar(car)
     }
 
-    fun updateCarService(car: Car) {
-        repository.updateCarService(car)
+    fun updateCar(car: Car) {
+        repository.updateCar(car)
     }
 
     fun changeSelectedCar(selectedCar: Car) {

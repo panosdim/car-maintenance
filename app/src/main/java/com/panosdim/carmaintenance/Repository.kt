@@ -48,7 +48,7 @@ class Repository {
         carsRef?.push()?.setValue(car)
     }
 
-    fun updateCarService(car: Car) {
+    fun updateCar(car: Car) {
         val carsRef = user?.let {
             car.id?.let { id ->
                 database.getReference("cars").child(it.uid).child(

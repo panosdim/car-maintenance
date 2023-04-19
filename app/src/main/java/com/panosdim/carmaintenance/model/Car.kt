@@ -8,5 +8,6 @@ import kotlinx.parcelize.Parcelize
 data class Car(
     var id: String? = null,
     var name: String = "",
-    var service: Service = Service()
+    var service: Service = Service(),
+    var tyres: Tyres = Tyres()
 ) : Parcelable

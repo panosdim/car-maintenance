@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.panosdim.carmaintenance.R
 import com.panosdim.carmaintenance.model.Car
 import com.panosdim.carmaintenance.model.Service
+import com.panosdim.carmaintenance.model.Tyres
 import com.panosdim.carmaintenance.ui.theme.CarMaintenanceTheme
 import com.panosdim.carmaintenance.utils.toEpochMilli
 import com.panosdim.carmaintenance.utils.toFormattedString
@@ -25,7 +26,7 @@ import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UpdateCarServiceDialog(
+fun UpdateCarTyresDialog(
     openDialog: Boolean,
     closeDialog: () -> Unit,
     selectedCar: Car,
@@ -40,26 +41,26 @@ fun UpdateCarServiceDialog(
     }
 
     if (openDialog) {
-        var carService by rememberSaveable {
-            if (selectedCar.service.odometer.isBlank()) {
+        var carTyres by rememberSaveable {
+            if (selectedCar.tyres.odometer.isBlank()) {
                 return@rememberSaveable mutableStateOf("")
             } else {
-                return@rememberSaveable mutableStateOf(selectedCar.service.odometer)
+                return@rememberSaveable mutableStateOf(selectedCar.tyres.odometer)
             }
         }
-        var nextCarService by rememberSaveable {
-            if (selectedCar.service.nextService.isBlank()) {
+        var nextTyresChange by rememberSaveable {
+            if (selectedCar.tyres.odometer.isBlank()) {
                 return@rememberSaveable mutableStateOf("")
             } else {
-                return@rememberSaveable mutableStateOf(selectedCar.service.nextService)
+                return@rememberSaveable mutableStateOf(selectedCar.tyres.nextChange)
             }
         }
         val date = remember {
             derivedStateOf {
-                if (selectedCar.service.date.isBlank()) {
+                if (selectedCar.tyres.date.isBlank()) {
                     return@derivedStateOf LocalDate.now()
                 } else {
-                    return@derivedStateOf selectedCar.service.date.toLocalDate()
+                    return@derivedStateOf selectedCar.tyres.date.toLocalDate()
                 }
             }
         }
@@ -102,19 +103,19 @@ fun UpdateCarServiceDialog(
         }
 
         fun isFormValid(): Boolean {
-            return carService.isNotBlank() && nextCarService.isNotBlank()
+            return carTyres.isNotBlank() && nextTyresChange.isNotBlank()
         }
 
         AlertDialog(
             onDismissRequest = closeDialog,
             title = {
-                Text(text = stringResource(R.string.car_service_title))
+                Text(text = stringResource(R.string.car_tyres_title))
             },
             text = {
                 Column {
                     datePickerState.selectedDateMillis?.toLocalDate()?.let {
                         OutlinedTextField(
-                            label = { Text(text = stringResource(R.string.car_service_date)) },
+                            label = { Text(text = stringResource(R.string.car_tyres_date)) },
                             readOnly = true,
                             interactionSource = source,
                             value = it
@@ -129,54 +130,54 @@ fun UpdateCarServiceDialog(
                         )
                     }
                     OutlinedTextField(
-                        value = carService,
-                        onValueChange = { carService = it },
+                        value = carTyres,
+                        onValueChange = { carTyres = it },
                         placeholder = {
                             Text(
-                                text = stringResource(R.string.car_service_placeholder)
+                                text = stringResource(R.string.car_tyres_placeholder)
                             )
                         },
                         suffix = { Text(text = stringResource(R.string.km)) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        isError = carService.isBlank(),
+                        isError = carTyres.isBlank(),
                         singleLine = true,
-                        label = { Text(text = stringResource(R.string.car_service)) },
+                        label = { Text(text = stringResource(R.string.car_tyres_change)) },
                     )
                     OutlinedTextField(
-                        value = nextCarService,
-                        onValueChange = { nextCarService = it },
+                        value = nextTyresChange,
+                        onValueChange = { nextTyresChange = it },
                         placeholder = {
                             Text(
-                                text = stringResource(R.string.next_car_service_placeholder)
+                                text = stringResource(R.string.next_car_tyres_next_placeholder)
                             )
                         },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        isError = nextCarService.isBlank(),
+                        isError = nextTyresChange.isBlank(),
                         singleLine = true,
                         suffix = { Text(text = stringResource(R.string.km)) },
-                        label = { Text(text = stringResource(R.string.next_car_service)) },
+                        label = { Text(text = stringResource(R.string.next_car_tyres)) },
                     )
                 }
             },
             confirmButton = {
                 TextButton(
                     onClick = {
-                        val newService = datePickerState.selectedDateMillis?.toLocalDate()?.let {
-                            Service(
+                        val newTyres = datePickerState.selectedDateMillis?.toLocalDate()?.let {
+                            Tyres(
                                 date = it.toFormattedString(),
-                                odometer = carService,
-                                nextService = nextCarService
+                                odometer = carTyres,
+                                nextChange = nextTyresChange
                             )
 
                         }
 
-                        if (newService != null) {
-                            selectedCar.service = newService
+                        if (newTyres != null) {
+                            selectedCar.tyres = newTyres
 
                             updateCar(selectedCar)
 
                             Toast.makeText(
-                                context, R.string.car_service_message,
+                                context, R.string.car_tyres_message,
                                 Toast.LENGTH_LONG
                             ).show()
                         }
@@ -205,12 +206,13 @@ fun UpdateCarServiceDialog(
 
 @Preview(showBackground = true)
 @Composable
-fun UpdateCarDialogPreview() {
+fun UpdateCarTyresDialogPreview() {
     val selectedCar = Car(
         name = "Test Car",
-        service = Service(date = "03-04-2023", odometer = "150000", nextService = "175000")
+        service = Service(date = "03-04-2023", odometer = "150000", nextService = "175000"),
+        tyres = Tyres(date = "23-07-2020", odometer = "42000", nextChange = "80000")
     )
     CarMaintenanceTheme {
-        UpdateCarServiceDialog(true, {}, selectedCar) {}
+        UpdateCarTyresDialog(true, {}, selectedCar) {}
     }
 }
