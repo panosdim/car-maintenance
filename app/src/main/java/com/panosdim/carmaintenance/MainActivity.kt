@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.firebase.FirebaseApp
 import com.panosdim.carmaintenance.model.Car
+import com.panosdim.carmaintenance.model.KTEO
 import com.panosdim.carmaintenance.model.Service
 import com.panosdim.carmaintenance.ui.CarDetails
 import com.panosdim.carmaintenance.ui.CarSelection
@@ -93,12 +94,14 @@ fun DefaultPreview() {
             Car(
                 id = "1",
                 name = "Opel Corsa",
-                service = Service(date = "09-04-2023", "213000", "235000")
+                service = Service(date = "09-04-2023", "213000", "235000"),
+                kteo = KTEO(date = "03-01-2024", exhaustCard = "03-01-2023")
             ),
             Car(
                 id = "2",
                 name = "Opel Crossland",
-                service = Service(date = "01-03-2023", "85000", "95000")
+                service = Service(date = "01-03-2023", "85000", "95000"),
+                kteo = KTEO(date = "15-06-2024", exhaustCard = "15-06-2023")
             )
         )
 

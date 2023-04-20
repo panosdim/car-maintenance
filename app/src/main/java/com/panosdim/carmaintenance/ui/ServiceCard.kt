@@ -29,7 +29,9 @@ fun ServiceCard(selectedCar: Car, updateCar: (car: Car) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        Column(modifier = Modifier.padding(padding)) {
+        Column(modifier = Modifier
+            .padding(padding)
+            .fillMaxWidth()) {
             Text(
                 text = stringResource(R.string.service),
                 modifier = Modifier.align(Alignment.CenterHorizontally),

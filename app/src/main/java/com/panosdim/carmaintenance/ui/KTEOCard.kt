@@ -1,12 +1,8 @@
 package com.panosdim.carmaintenance.ui
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,15 +19,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.panosdim.carmaintenance.R
 import com.panosdim.carmaintenance.model.Car
+import com.panosdim.carmaintenance.model.KTEO
 import com.panosdim.carmaintenance.model.Service
 import com.panosdim.carmaintenance.model.Tyres
 import com.panosdim.carmaintenance.padding
 import com.panosdim.carmaintenance.ui.theme.CarMaintenanceTheme
-import com.panosdim.carmaintenance.utils.getFormattedNumber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TyresCard(selectedCar: Car, updateCar: (car: Car) -> Unit) {
+fun KTEOCard(selectedCar: Car, updateCar: (car: Car) -> Unit) {
     var openDialog by rememberSaveable { mutableStateOf(false) }
 
     Card(
@@ -39,65 +35,56 @@ fun TyresCard(selectedCar: Car, updateCar: (car: Car) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        Column(modifier = Modifier
-            .padding(padding)
-            .fillMaxWidth()) {
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxWidth()
+        ) {
             Text(
-                text = stringResource(R.string.tyres),
+                text = stringResource(R.string.kteo),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.displayMedium
             )
             Spacer(Modifier.padding(padding))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(IntrinsicSize.Min),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    selectedCar.tyres.date,
-                    style = MaterialTheme.typography.headlineMedium
-                )
-                Text(
-                    "${getFormattedNumber(selectedCar.tyres.odometer)} km",
-                    style = MaterialTheme.typography.headlineMedium
-                )
-            }
+            Text(
+                selectedCar.kteo.date,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                style = MaterialTheme.typography.headlineMedium
+            )
             Spacer(Modifier.padding(padding))
             Text(
-                text = stringResource(R.string.next_change),
+                text = stringResource(R.string.exhaust_card),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.displaySmall
             )
             Spacer(Modifier.padding(padding))
             Text(
-                "${getFormattedNumber(selectedCar.tyres.nextChange)} km",
+                selectedCar.kteo.exhaustCard,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.headlineMedium
             )
         }
 
-        UpdateCarTyresDialog(
+        UpdateCarKTEODialog(
             openDialog = openDialog,
             closeDialog = { openDialog = false },
             selectedCar = selectedCar
         ) { updateCar(it) }
-
     }
 }
 
 
 @Preview(showBackground = true)
 @Composable
-fun TyresCardPreview() {
+fun KTEOCardPreview() {
     val selectedCar = Car(
         name = "Test Car",
         service = Service(date = "03-04-2023", odometer = "150000", nextService = "175000"),
-        tyres = Tyres(date = "23-07-2020", odometer = "42000", nextChange = "80000")
+        tyres = Tyres(date = "23-07-2020", odometer = "42000", nextChange = "80000"),
+        kteo = KTEO(date = "15-06-2024", exhaustCard = "15-06-2023")
     )
 
     CarMaintenanceTheme {
-        TyresCard(selectedCar) {}
+        KTEOCard(selectedCar) {}
     }
 }

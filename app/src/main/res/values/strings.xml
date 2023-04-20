@@ -32,4 +32,10 @@
     <string name="next_car_tyres_next_placeholder">Type next tyres change odometer</string>
     <string name="next_car_tyres">Next Tyres Change</string>
     <string name="car_tyres_message">Car Tyres Updated Successfully</string>
+    <string name="kteo">KTEO</string>
+    <string name="exhaust_card">Exhaust Card</string>
+    <string name="car_kteo_title">Update Car KTEO</string>
+    <string name="car_kteo_date">KTEO Date</string>
+    <string name="car_kteo_message">Car KTEO updated successfully</string>
+    <string name="car_exhaust_date">Exhaust Card Date</string>
 </resources>
