@@ -1,23 +1,14 @@
 package com.panosdim.carmaintenance.ui
 
 import android.widget.Toast
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -41,18 +32,6 @@ fun UpdateCarKTEODialog(
     updateCar: (car: Car) -> Unit
 ) {
     val context = LocalContext.current
-
-    val openDatePickerDialog = remember { mutableStateOf(false) }
-    val source = remember { MutableInteractionSource() }
-    if (source.collectIsPressedAsState().value) {
-        openDatePickerDialog.value = true
-    }
-
-    val openExhaustDatePickerDialog = remember { mutableStateOf(false) }
-    val exhaustSource = remember { MutableInteractionSource() }
-    if (exhaustSource.collectIsPressedAsState().value) {
-        openExhaustDatePickerDialog.value = true
-    }
 
     if (openDialog) {
         val date = remember {
@@ -78,73 +57,6 @@ fun UpdateCarKTEODialog(
         }
         val exhaustDatePickerState =
             rememberDatePickerState(initialSelectedDateMillis = exhaustDate.value.toEpochMilli())
-        val confirmEnabled = remember {
-            derivedStateOf { datePickerState.selectedDateMillis != null && exhaustDatePickerState.selectedDateMillis != null }
-        }
-
-        if (openDatePickerDialog.value) {
-            DatePickerDialog(
-                onDismissRequest = {
-                    // Dismiss the dialog when the user clicks outside the dialog or on the back
-                    // button. If you want to disable that functionality, simply use an empty
-                    // onDismissRequest.
-                    openDatePickerDialog.value = false
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            openDatePickerDialog.value = false
-                        },
-                        enabled = confirmEnabled.value
-                    ) {
-                        Text(stringResource(R.string.ok))
-                    }
-                },
-                dismissButton = {
-                    TextButton(
-                        onClick = {
-                            openDatePickerDialog.value = false
-                        }
-                    ) {
-                        Text(stringResource(R.string.cancel))
-                    }
-                }
-            ) {
-                DatePicker(state = datePickerState)
-            }
-        }
-
-        if (openExhaustDatePickerDialog.value) {
-            DatePickerDialog(
-                onDismissRequest = {
-                    // Dismiss the dialog when the user clicks outside the dialog or on the back
-                    // button. If you want to disable that functionality, simply use an empty
-                    // onDismissRequest.
-                    openExhaustDatePickerDialog.value = false
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            openExhaustDatePickerDialog.value = false
-                        },
-                        enabled = confirmEnabled.value
-                    ) {
-                        Text(stringResource(R.string.ok))
-                    }
-                },
-                dismissButton = {
-                    TextButton(
-                        onClick = {
-                            openExhaustDatePickerDialog.value = false
-                        }
-                    ) {
-                        Text(stringResource(R.string.cancel))
-                    }
-                }
-            ) {
-                DatePicker(state = exhaustDatePickerState)
-            }
-        }
 
         AlertDialog(
             onDismissRequest = closeDialog,
@@ -153,38 +65,14 @@ fun UpdateCarKTEODialog(
             },
             text = {
                 Column {
-                    datePickerState.selectedDateMillis?.toLocalDate()?.let {
-                        OutlinedTextField(
-                            label = { Text(text = stringResource(R.string.car_kteo_date)) },
-                            readOnly = true,
-                            interactionSource = source,
-                            value = it
-                                .toFormattedString(),
-                            trailingIcon = {
-                                Icon(
-                                    imageVector = Icons.Default.CalendarToday,
-                                    contentDescription = "Calendar Icon"
-                                )
-                            },
-                            onValueChange = { },
-                        )
-                    }
-                    exhaustDatePickerState.selectedDateMillis?.toLocalDate()?.let {
-                        OutlinedTextField(
-                            label = { Text(text = stringResource(R.string.car_exhaust_date)) },
-                            readOnly = true,
-                            interactionSource = exhaustSource,
-                            value = it
-                                .toFormattedString(),
-                            trailingIcon = {
-                                Icon(
-                                    imageVector = Icons.Default.CalendarToday,
-                                    contentDescription = "Calendar Icon"
-                                )
-                            },
-                            onValueChange = { },
-                        )
-                    }
+                    OutlinedDatePicker(
+                        state = datePickerState,
+                        label = stringResource(R.string.car_kteo_date)
+                    )
+                    OutlinedDatePicker(
+                        state = exhaustDatePickerState,
+                        label = stringResource(R.string.car_exhaust_date)
+                    )
                 }
             },
             confirmButton = {

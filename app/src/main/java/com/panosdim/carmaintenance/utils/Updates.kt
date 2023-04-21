@@ -1,4 +1,4 @@
-package com.panosdim.carmaintenance
+package com.panosdim.carmaintenance.utils
 
 import android.app.DownloadManager
 import android.app.NotificationChannel
@@ -12,12 +12,16 @@ import androidx.core.content.pm.PackageInfoCompat
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import com.panosdim.carmaintenance.CHANNEL_ID
+import com.panosdim.carmaintenance.R
+import com.panosdim.carmaintenance.TAG
 import com.panosdim.carmaintenance.model.FileMetadata
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 var refId: Long = -1
 
+@Suppress("DEPRECATION")
 fun checkForNewVersion(context: Context) {
     val storage = Firebase.storage
     val metadataFileName = "output-metadata.json"

@@ -1,12 +1,8 @@
 package com.panosdim.carmaintenance.ui
 
 import android.widget.Toast
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -34,12 +30,6 @@ fun UpdateCarTyresDialog(
 ) {
     val context = LocalContext.current
 
-    val openDatePickerDialog = remember { mutableStateOf(false) }
-    val source = remember { MutableInteractionSource() }
-    if (source.collectIsPressedAsState().value) {
-        openDatePickerDialog.value = true
-    }
-
     if (openDialog) {
         var carTyres by rememberSaveable {
             if (selectedCar.tyres.odometer.isBlank()) {
@@ -66,41 +56,6 @@ fun UpdateCarTyresDialog(
         }
         val datePickerState =
             rememberDatePickerState(initialSelectedDateMillis = date.value.toEpochMilli())
-        val confirmEnabled = remember {
-            derivedStateOf { datePickerState.selectedDateMillis != null }
-        }
-
-        if (openDatePickerDialog.value) {
-            DatePickerDialog(
-                onDismissRequest = {
-                    // Dismiss the dialog when the user clicks outside the dialog or on the back
-                    // button. If you want to disable that functionality, simply use an empty
-                    // onDismissRequest.
-                    openDatePickerDialog.value = false
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            openDatePickerDialog.value = false
-                        },
-                        enabled = confirmEnabled.value
-                    ) {
-                        Text(stringResource(R.string.ok))
-                    }
-                },
-                dismissButton = {
-                    TextButton(
-                        onClick = {
-                            openDatePickerDialog.value = false
-                        }
-                    ) {
-                        Text(stringResource(R.string.cancel))
-                    }
-                }
-            ) {
-                DatePicker(state = datePickerState)
-            }
-        }
 
         fun isFormValid(): Boolean {
             return carTyres.isNotBlank() && nextTyresChange.isNotBlank()
@@ -113,22 +68,10 @@ fun UpdateCarTyresDialog(
             },
             text = {
                 Column {
-                    datePickerState.selectedDateMillis?.toLocalDate()?.let {
-                        OutlinedTextField(
-                            label = { Text(text = stringResource(R.string.car_tyres_date)) },
-                            readOnly = true,
-                            interactionSource = source,
-                            value = it
-                                .toFormattedString(),
-                            trailingIcon = {
-                                Icon(
-                                    imageVector = Icons.Default.CalendarToday,
-                                    contentDescription = "Calendar Icon"
-                                )
-                            },
-                            onValueChange = { },
-                        )
-                    }
+                    OutlinedDatePicker(
+                        state = datePickerState,
+                        label = stringResource(R.string.car_tyres_date)
+                    )
                     OutlinedTextField(
                         value = carTyres,
                         onValueChange = { carTyres = it },
