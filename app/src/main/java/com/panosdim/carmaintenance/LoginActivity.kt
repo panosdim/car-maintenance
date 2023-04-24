@@ -22,7 +22,7 @@ class LoginActivity : ComponentActivity() {
 
         // Initialize Firebase
         FirebaseApp.initializeApp(this)
-        
+
         // Check if user is signed in (non-null) and update UI accordingly.
         if (user == null) {
             // Choose authentication providers
@@ -36,7 +36,7 @@ class LoginActivity : ComponentActivity() {
                 .setAvailableProviders(providers)
                 .setIsSmartLockEnabled(!BuildConfig.DEBUG, true)
                 .setTheme(R.style.Theme_CarMaintenance)
-                .setLogo(R.drawable.ic_launcher_foreground)
+                .setLogo(R.drawable.ic_notification)
                 .build()
             signInLauncher.launch(signInIntent)
         } else {

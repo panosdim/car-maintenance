@@ -82,14 +82,20 @@ fun KTEOCard(selectedCar: Car, updateCar: (car: Car) -> Unit) {
                 selectedCar = selectedCar
             ) { updateCar(it) }
         }
-        if (selectedCar.kteo.date.toLocalDate().isBefore(LocalDate.now())) {
+        if (selectedCar.kteo.date.toLocalDate()
+                .isBefore(LocalDate.now()) || selectedCar.kteo.exhaustCard.toLocalDate()
+                .isBefore(LocalDate.now())
+        ) {
             Icon(
                 Icons.Default.Error,
                 modifier = Modifier.padding(12.dp),
                 contentDescription = null,
                 tint = Color.Red
             )
-        } else if (selectedCar.kteo.date.toLocalDate().minusWeeks(1).isBefore(LocalDate.now())) {
+        } else if (selectedCar.kteo.date.toLocalDate().minusWeeks(1)
+                .isBefore(LocalDate.now()) || selectedCar.kteo.exhaustCard.toLocalDate()
+                .minusWeeks(1).isBefore(LocalDate.now())
+        ) {
             Icon(
                 Icons.Default.Warning,
                 modifier = Modifier.padding(12.dp),
