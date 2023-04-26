@@ -37,7 +37,7 @@ fun UpdateCarKTEODialog(
         val date = remember {
             derivedStateOf {
                 if (selectedCar.kteo.date.isBlank()) {
-                    return@derivedStateOf LocalDate.now()
+                    return@derivedStateOf LocalDate.now().plusYears(2)
                 } else {
                     return@derivedStateOf selectedCar.kteo.date.toLocalDate()
                 }
@@ -49,7 +49,7 @@ fun UpdateCarKTEODialog(
         val exhaustDate = remember {
             derivedStateOf {
                 if (selectedCar.kteo.exhaustCard.isBlank()) {
-                    return@derivedStateOf LocalDate.now()
+                    return@derivedStateOf LocalDate.now().plusYears(1)
                 } else {
                     return@derivedStateOf selectedCar.kteo.exhaustCard.toLocalDate()
                 }

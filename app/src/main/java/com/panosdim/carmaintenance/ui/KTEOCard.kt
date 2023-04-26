@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -39,6 +40,7 @@ import java.time.LocalDate
 @Composable
 fun KTEOCard(selectedCar: Car, updateCar: (car: Car) -> Unit) {
     var openDialog by rememberSaveable { mutableStateOf(false) }
+    val redrawIcon = remember { mutableStateOf(false) }
 
     Box(contentAlignment = Alignment.TopEnd) {
         Card(
@@ -80,39 +82,48 @@ fun KTEOCard(selectedCar: Car, updateCar: (car: Car) -> Unit) {
                 openDialog = openDialog,
                 closeDialog = { openDialog = false },
                 selectedCar = selectedCar
-            ) { updateCar(it) }
+            ) { updateCar(it); redrawIcon.value = !redrawIcon.value }
         }
-        if (selectedCar.kteo.date.toLocalDate()
-                .isBefore(LocalDate.now()) || selectedCar.kteo.exhaustCard.toLocalDate()
-                .isBefore(LocalDate.now())
-        ) {
-            Icon(
-                Icons.Default.Error,
-                modifier = Modifier.padding(12.dp),
-                contentDescription = null,
-                tint = Color.Red
-            )
-        } else if (selectedCar.kteo.date.toLocalDate().minusWeeks(1)
-                .isBefore(LocalDate.now()) || selectedCar.kteo.exhaustCard.toLocalDate()
-                .minusWeeks(1).isBefore(LocalDate.now())
-        ) {
-            Icon(
-                Icons.Default.Warning,
-                modifier = Modifier.padding(12.dp),
-                contentDescription = null,
-                tint = Color.Yellow
-            )
+
+        if (redrawIcon.value) {
+            StatusIcon(selectedCar = selectedCar)
         } else {
-            Icon(
-                Icons.Default.CheckCircle,
-                modifier = Modifier.padding(12.dp),
-                contentDescription = null,
-                tint = Color.Green
-            )
+            StatusIcon(selectedCar = selectedCar)
         }
     }
 }
 
+@Composable
+fun StatusIcon(selectedCar: Car) {
+    if (selectedCar.kteo.date.toLocalDate()
+            .isBefore(LocalDate.now()) || selectedCar.kteo.exhaustCard.toLocalDate()
+            .isBefore(LocalDate.now())
+    ) {
+        Icon(
+            Icons.Default.Error,
+            modifier = Modifier.padding(12.dp),
+            contentDescription = null,
+            tint = Color.Red
+        )
+    } else if (selectedCar.kteo.date.toLocalDate().minusWeeks(1)
+            .isBefore(LocalDate.now()) || selectedCar.kteo.exhaustCard.toLocalDate()
+            .minusWeeks(1).isBefore(LocalDate.now())
+    ) {
+        Icon(
+            Icons.Default.Warning,
+            modifier = Modifier.padding(12.dp),
+            contentDescription = null,
+            tint = Color.Yellow
+        )
+    } else {
+        Icon(
+            Icons.Default.CheckCircle,
+            modifier = Modifier.padding(12.dp),
+            contentDescription = null,
+            tint = Color.Green
+        )
+    }
+}
 
 @Preview(showBackground = true)
 @Composable

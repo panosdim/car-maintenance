@@ -74,7 +74,9 @@ fun UpdateCarTyresDialog(
                     )
                     OutlinedTextField(
                         value = carTyres,
-                        onValueChange = { carTyres = it },
+                        onValueChange = {
+                            carTyres = it; nextTyresChange = (it.toInt() + 15000).toString()
+                        },
                         placeholder = {
                             Text(
                                 text = stringResource(R.string.car_tyres_placeholder)
@@ -88,7 +90,9 @@ fun UpdateCarTyresDialog(
                     )
                     OutlinedTextField(
                         value = nextTyresChange,
-                        onValueChange = { nextTyresChange = it },
+                        onValueChange = {
+                            nextTyresChange = it
+                        },
                         placeholder = {
                             Text(
                                 text = stringResource(R.string.next_car_tyres_next_placeholder)

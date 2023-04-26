@@ -38,36 +38,35 @@ class ExpiredWorker(context: Context, params: WorkerParameters) : Worker(context
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
 
-        val itemsRef = database.getReference("items").child(user?.uid!!)
+        user?.let { database.getReference("cars").child(it.uid) }
+            ?.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    // Not used
+                }
 
-        itemsRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(error: DatabaseError) {
-                // Not used
-            }
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val today = now()
+                    dataSnapshot.children.forEach { car ->
+                        val item = car.getValue(Car::class.java)
 
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val today = now()
-                for (itemSnapshot in dataSnapshot.children) {
-                    val item = itemSnapshot.getValue(Car::class.java)
-
-                    if (item != null &&
-                        (item.kteo.date.toLocalDate().minusWeeks(1).isBefore(today)
-                                || item.kteo.exhaustCard.toLocalDate().minusWeeks(1)
-                            .isBefore(today))
-                    ) {
-                        with(NotificationManagerCompat.from(applicationContext)) {
-                            if (ActivityCompat.checkSelfPermission(
-                                    applicationContext,
-                                    Manifest.permission.POST_NOTIFICATIONS
-                                ) == PackageManager.PERMISSION_GRANTED
-                            ) {
-                                notify(0, mBuilder.build())
+                        if (item != null &&
+                            (item.kteo.date.toLocalDate().minusWeeks(1).isBefore(today)
+                                    || item.kteo.exhaustCard.toLocalDate().minusWeeks(1)
+                                .isBefore(today))
+                        ) {
+                            with(NotificationManagerCompat.from(applicationContext)) {
+                                if (ActivityCompat.checkSelfPermission(
+                                        applicationContext,
+                                        Manifest.permission.POST_NOTIFICATIONS
+                                    ) == PackageManager.PERMISSION_GRANTED
+                                ) {
+                                    notify(0, mBuilder.build())
+                                }
                             }
                         }
                     }
                 }
-            }
-        })
+            })
 
         // Indicate success or failure with your return value:
         return Result.success()

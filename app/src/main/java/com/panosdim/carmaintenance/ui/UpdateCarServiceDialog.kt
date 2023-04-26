@@ -73,7 +73,9 @@ fun UpdateCarServiceDialog(
                     )
                     OutlinedTextField(
                         value = carService,
-                        onValueChange = { carService = it },
+                        onValueChange = {
+                            carService = it; nextCarService = (it.toInt() + 15000).toString()
+                        },
                         placeholder = {
                             Text(
                                 text = stringResource(R.string.car_service_placeholder)
