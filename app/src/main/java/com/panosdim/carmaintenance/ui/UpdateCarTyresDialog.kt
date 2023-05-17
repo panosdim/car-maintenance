@@ -75,7 +75,11 @@ fun UpdateCarTyresDialog(
                     OutlinedTextField(
                         value = carTyres,
                         onValueChange = {
-                            carTyres = it; nextTyresChange = (it.toInt() + 15000).toString()
+                            carTyres = it
+                            try {
+                                nextTyresChange = (it.toInt() + 15000).toString()
+                            } catch (_: NumberFormatException) {
+                            }
                         },
                         placeholder = {
                             Text(

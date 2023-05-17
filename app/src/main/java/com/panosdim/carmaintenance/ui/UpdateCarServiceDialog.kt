@@ -74,7 +74,11 @@ fun UpdateCarServiceDialog(
                     OutlinedTextField(
                         value = carService,
                         onValueChange = {
-                            carService = it; nextCarService = (it.toInt() + 15000).toString()
+                            carService = it
+                            try {
+                                nextCarService = (it.toInt() + 15000).toString()
+                            } catch (_: NumberFormatException) {
+                            }
                         },
                         placeholder = {
                             Text(
