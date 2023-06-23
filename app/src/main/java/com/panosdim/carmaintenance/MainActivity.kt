@@ -48,6 +48,7 @@ import com.panosdim.carmaintenance.ui.CarSelection
 import com.panosdim.carmaintenance.ui.SignOut
 import com.panosdim.carmaintenance.ui.theme.CarMaintenanceTheme
 import com.panosdim.carmaintenance.utils.checkForNewVersion
+import com.panosdim.carmaintenance.utils.createNotificationChannel
 import com.panosdim.carmaintenance.utils.refId
 import java.util.concurrent.TimeUnit
 
@@ -91,6 +92,7 @@ class MainActivity : ComponentActivity() {
         registerReceiver(onComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
 
         // Initialize Firebase
+        createNotificationChannel(this)
         FirebaseApp.initializeApp(this)
 
         // Check for new version
