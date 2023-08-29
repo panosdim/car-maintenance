@@ -10,14 +10,19 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.panosdim.carmaintenance.model.Car
 import com.panosdim.carmaintenance.utils.toLocalDate
 import java.time.LocalDate.now
 
 class ExpiredWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
+    private val user = Firebase.auth.currentUser
+    private val database = Firebase.database
 
     override fun doWork(): Result {
         val intent = Intent(applicationContext, MainActivity::class.java).apply {

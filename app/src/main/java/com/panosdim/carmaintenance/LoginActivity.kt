@@ -1,68 +1,50 @@
 package com.panosdim.carmaintenance
 
 import android.content.Intent
-import android.widget.Toast
+import android.os.Bundle
 import androidx.activity.ComponentActivity
-import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
-import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
-import com.google.firebase.FirebaseApp
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.panosdim.carmaintenance.ui.LoginScreen
+import com.panosdim.carmaintenance.ui.theme.CarMaintenanceTheme
 
 
 class LoginActivity : ComponentActivity() {
-    private val signInLauncher = registerForActivityResult(
-        FirebaseAuthUIActivityResultContract()
-    ) { res ->
-        this.onSignInResult(res)
+    private lateinit var auth: FirebaseAuth
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Initialize Firebase Auth
+        auth = Firebase.auth
+
+        setContent {
+            CarMaintenanceTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    LoginScreen(this)
+                }
+            }
+        }
     }
 
     override fun onStart() {
         super.onStart()
-
-        // Initialize Firebase
-        FirebaseApp.initializeApp(this)
-
         // Check if user is signed in (non-null) and update UI accordingly.
-        if (user == null) {
-            // Choose authentication providers
-            val providers = arrayListOf(
-                AuthUI.IdpConfig.EmailBuilder().build()
-            )
-
-            // Create and launch sign-in intent
-            val signInIntent = AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .setIsSmartLockEnabled(!BuildConfig.DEBUG, true)
-                .setTheme(R.style.Theme_CarMaintenance)
-                .setLogo(R.drawable.ic_notification)
-                .build()
-            signInLauncher.launch(signInIntent)
-        } else {
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
             // Successfully signed in
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
-        }
-    }
-
-    private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
-        val response = result.idpResponse
-        if (result.resultCode == RESULT_OK) {
-            // Successfully signed in
-            user = FirebaseAuth.getInstance().currentUser
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-        } else {
-            // Sign in failed. If response is null the user canceled the
-            // sign-in flow using the back button. Otherwise check
-            // response.getError().getErrorCode() and handle the error.
-            Toast.makeText(
-                this, response?.error?.toString(),
-                Toast.LENGTH_LONG
-            ).show()
         }
     }
 }

@@ -9,12 +9,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.panosdim.carmaintenance.MainViewModel
 import com.panosdim.carmaintenance.R
 import com.panosdim.carmaintenance.model.Car
-import com.panosdim.carmaintenance.model.Service
-import com.panosdim.carmaintenance.model.Tyres
-import com.panosdim.carmaintenance.ui.theme.CarMaintenanceTheme
+import com.panosdim.carmaintenance.model.Tires
 import com.panosdim.carmaintenance.utils.toEpochMilli
 import com.panosdim.carmaintenance.utils.toFormattedString
 import com.panosdim.carmaintenance.utils.toLocalDate
@@ -22,35 +21,35 @@ import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UpdateCarTyresDialog(
+fun UpdateCarTiresDialog(
     openDialog: Boolean,
     closeDialog: () -> Unit,
     selectedCar: Car,
-    updateCar: (car: Car) -> Unit
 ) {
     val context = LocalContext.current
+    val viewModel: MainViewModel = viewModel()
 
     if (openDialog) {
-        var carTyres by rememberSaveable {
-            if (selectedCar.tyres.odometer.isBlank()) {
+        var carTires by rememberSaveable {
+            if (selectedCar.tires.odometer.isBlank()) {
                 return@rememberSaveable mutableStateOf("")
             } else {
-                return@rememberSaveable mutableStateOf(selectedCar.tyres.odometer)
+                return@rememberSaveable mutableStateOf(selectedCar.tires.odometer)
             }
         }
-        var nextTyresChange by rememberSaveable {
-            if (selectedCar.tyres.odometer.isBlank()) {
+        var nextTiresChange by rememberSaveable {
+            if (selectedCar.tires.odometer.isBlank()) {
                 return@rememberSaveable mutableStateOf("")
             } else {
-                return@rememberSaveable mutableStateOf(selectedCar.tyres.nextChange)
+                return@rememberSaveable mutableStateOf(selectedCar.tires.nextChange)
             }
         }
         val date = remember {
             derivedStateOf {
-                if (selectedCar.tyres.date.isBlank()) {
+                if (selectedCar.tires.date.isBlank()) {
                     return@derivedStateOf LocalDate.now()
                 } else {
-                    return@derivedStateOf selectedCar.tyres.date.toLocalDate()
+                    return@derivedStateOf selectedCar.tires.date.toLocalDate()
                 }
             }
         }
@@ -58,77 +57,77 @@ fun UpdateCarTyresDialog(
             rememberDatePickerState(initialSelectedDateMillis = date.value.toEpochMilli())
 
         fun isFormValid(): Boolean {
-            return carTyres.isNotBlank() && nextTyresChange.isNotBlank()
+            return carTires.isNotBlank() && nextTiresChange.isNotBlank()
         }
 
         AlertDialog(
             onDismissRequest = closeDialog,
             title = {
-                Text(text = stringResource(R.string.car_tyres_title))
+                Text(text = stringResource(R.string.car_tires_title))
             },
             text = {
                 Column {
                     OutlinedDatePicker(
                         state = datePickerState,
-                        label = stringResource(R.string.car_tyres_date)
+                        label = stringResource(R.string.car_tires_date)
                     )
                     OutlinedTextField(
-                        value = carTyres,
+                        value = carTires,
                         onValueChange = {
-                            carTyres = it
+                            carTires = it
                             try {
-                                nextTyresChange = (it.toInt() + 15000).toString()
+                                nextTiresChange = (it.toInt() + 40000).toString()
                             } catch (_: NumberFormatException) {
                             }
                         },
                         placeholder = {
                             Text(
-                                text = stringResource(R.string.car_tyres_placeholder)
+                                text = stringResource(R.string.car_tires_placeholder)
                             )
                         },
                         suffix = { Text(text = stringResource(R.string.km)) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        isError = carTyres.isBlank(),
+                        isError = carTires.isBlank(),
                         singleLine = true,
-                        label = { Text(text = stringResource(R.string.car_tyres_change)) },
+                        label = { Text(text = stringResource(R.string.car_tires_change)) },
                     )
                     OutlinedTextField(
-                        value = nextTyresChange,
+                        value = nextTiresChange,
                         onValueChange = {
-                            nextTyresChange = it
+                            nextTiresChange = it
                         },
                         placeholder = {
                             Text(
-                                text = stringResource(R.string.next_car_tyres_next_placeholder)
+                                text = stringResource(R.string.next_car_tires_next_placeholder)
                             )
                         },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        isError = nextTyresChange.isBlank(),
+                        isError = nextTiresChange.isBlank(),
                         singleLine = true,
                         suffix = { Text(text = stringResource(R.string.km)) },
-                        label = { Text(text = stringResource(R.string.next_car_tyres)) },
+                        label = { Text(text = stringResource(R.string.next_car_tires)) },
                     )
                 }
             },
             confirmButton = {
                 TextButton(
                     onClick = {
-                        val newTyres = datePickerState.selectedDateMillis?.toLocalDate()?.let {
-                            Tyres(
+                        val newTires = datePickerState.selectedDateMillis?.toLocalDate()?.let {
+                            Tires(
                                 date = it.toFormattedString(),
-                                odometer = carTyres,
-                                nextChange = nextTyresChange
+                                odometer = carTires,
+                                nextChange = nextTiresChange
                             )
 
                         }
 
-                        if (newTyres != null) {
-                            selectedCar.tyres = newTyres
+                        if (newTires != null) {
+                            selectedCar.tires = newTires
 
-                            updateCar(selectedCar)
+                            viewModel.updateCar(selectedCar)
 
                             Toast.makeText(
-                                context, R.string.car_tyres_message,
+                                context, R.string.car_tires_message,
                                 Toast.LENGTH_LONG
                             ).show()
                         }
@@ -152,18 +151,5 @@ fun UpdateCarTyresDialog(
                 }
             }
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun UpdateCarTyresDialogPreview() {
-    val selectedCar = Car(
-        name = "Test Car",
-        service = Service(date = "03-04-2023", odometer = "150000", nextService = "175000"),
-        tyres = Tyres(date = "23-07-2020", odometer = "42000", nextChange = "80000")
-    )
-    CarMaintenanceTheme {
-        UpdateCarTyresDialog(true, {}, selectedCar) {}
     }
 }

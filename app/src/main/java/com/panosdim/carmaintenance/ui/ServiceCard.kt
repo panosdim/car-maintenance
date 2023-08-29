@@ -10,18 +10,17 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.font.FontWeight
 import com.panosdim.carmaintenance.R
 import com.panosdim.carmaintenance.model.Car
-import com.panosdim.carmaintenance.model.Service
-import com.panosdim.carmaintenance.padding
-import com.panosdim.carmaintenance.ui.theme.CarMaintenanceTheme
+import com.panosdim.carmaintenance.paddingLarge
+import com.panosdim.carmaintenance.paddingSmall
 import com.panosdim.carmaintenance.utils.getFormattedNumber
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ServiceCard(selectedCar: Car, updateCar: (car: Car) -> Unit) {
+fun ServiceCard(selectedCar: Car) {
     var openDialog by rememberSaveable { mutableStateOf(false) }
 
     Card(
@@ -29,15 +28,17 @@ fun ServiceCard(selectedCar: Car, updateCar: (car: Car) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        Column(modifier = Modifier
-            .padding(padding)
-            .fillMaxWidth()) {
+        Column(
+            modifier = Modifier
+                .padding(paddingLarge)
+                .fillMaxWidth()
+        ) {
             Text(
                 text = stringResource(R.string.service),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                style = MaterialTheme.typography.displayMedium
+                style = MaterialTheme.typography.displaySmall
             )
-            Spacer(Modifier.padding(padding))
+            Spacer(Modifier.padding(paddingSmall))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -54,17 +55,17 @@ fun ServiceCard(selectedCar: Car, updateCar: (car: Car) -> Unit) {
                     style = MaterialTheme.typography.headlineMedium
                 )
             }
-            Spacer(Modifier.padding(padding))
+            Spacer(Modifier.padding(paddingLarge))
             Text(
                 text = stringResource(R.string.next_service),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                style = MaterialTheme.typography.displaySmall
+                style = MaterialTheme.typography.headlineLarge
             )
-            Spacer(Modifier.padding(padding))
             Text(
                 "${getFormattedNumber(selectedCar.service.nextService)} km",
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold
             )
         }
 
@@ -72,21 +73,6 @@ fun ServiceCard(selectedCar: Car, updateCar: (car: Car) -> Unit) {
             openDialog = openDialog,
             closeDialog = { openDialog = false },
             selectedCar = selectedCar
-        ) { updateCar(it) }
-
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun ServiceCardPreview() {
-    val selectedCar = Car(
-        name = "Test Car",
-        service = Service(date = "03-04-2023", odometer = "150000", nextService = "175000")
-    )
-
-    CarMaintenanceTheme {
-        ServiceCard(selectedCar) {}
+        )
     }
 }

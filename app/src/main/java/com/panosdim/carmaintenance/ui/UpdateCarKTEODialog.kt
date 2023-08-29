@@ -12,12 +12,11 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.panosdim.carmaintenance.MainViewModel
 import com.panosdim.carmaintenance.R
 import com.panosdim.carmaintenance.model.Car
 import com.panosdim.carmaintenance.model.KTEO
-import com.panosdim.carmaintenance.model.Service
-import com.panosdim.carmaintenance.ui.theme.CarMaintenanceTheme
 import com.panosdim.carmaintenance.utils.toEpochMilli
 import com.panosdim.carmaintenance.utils.toFormattedString
 import com.panosdim.carmaintenance.utils.toLocalDate
@@ -29,9 +28,9 @@ fun UpdateCarKTEODialog(
     openDialog: Boolean,
     closeDialog: () -> Unit,
     selectedCar: Car,
-    updateCar: (car: Car) -> Unit
 ) {
     val context = LocalContext.current
+    val viewModel: MainViewModel = viewModel()
 
     if (openDialog) {
         val date = remember {
@@ -91,7 +90,7 @@ fun UpdateCarKTEODialog(
                         if (newKTEO != null) {
                             selectedCar.kteo = newKTEO
 
-                            updateCar(selectedCar)
+                            viewModel.updateCar(selectedCar)
 
                             Toast.makeText(
                                 context, R.string.car_kteo_message,
@@ -117,18 +116,5 @@ fun UpdateCarKTEODialog(
                 }
             }
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun UpdateCarKTEODialogPreview() {
-    val selectedCar = Car(
-        name = "Test Car",
-        service = Service(date = "03-04-2023", odometer = "150000", nextService = "175000"),
-        kteo = KTEO(date = "15-06-2024", exhaustCard = "15-06-2023")
-    )
-    CarMaintenanceTheme {
-        UpdateCarKTEODialog(true, {}, selectedCar) {}
     }
 }

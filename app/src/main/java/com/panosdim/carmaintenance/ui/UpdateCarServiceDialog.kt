@@ -9,11 +9,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.panosdim.carmaintenance.MainViewModel
 import com.panosdim.carmaintenance.R
 import com.panosdim.carmaintenance.model.Car
 import com.panosdim.carmaintenance.model.Service
-import com.panosdim.carmaintenance.ui.theme.CarMaintenanceTheme
 import com.panosdim.carmaintenance.utils.toEpochMilli
 import com.panosdim.carmaintenance.utils.toFormattedString
 import com.panosdim.carmaintenance.utils.toLocalDate
@@ -25,9 +25,9 @@ fun UpdateCarServiceDialog(
     openDialog: Boolean,
     closeDialog: () -> Unit,
     selectedCar: Car,
-    updateCar: (car: Car) -> Unit
 ) {
     val context = LocalContext.current
+    val viewModel: MainViewModel = viewModel()
 
     if (openDialog) {
         var carService by rememberSaveable {
@@ -122,7 +122,7 @@ fun UpdateCarServiceDialog(
                         if (newService != null) {
                             selectedCar.service = newService
 
-                            updateCar(selectedCar)
+                            viewModel.updateCar(selectedCar)
 
                             Toast.makeText(
                                 context, R.string.car_service_message,
@@ -149,17 +149,5 @@ fun UpdateCarServiceDialog(
                 }
             }
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun UpdateCarDialogPreview() {
-    val selectedCar = Car(
-        name = "Test Car",
-        service = Service(date = "03-04-2023", odometer = "150000", nextService = "175000")
-    )
-    CarMaintenanceTheme {
-        UpdateCarServiceDialog(true, {}, selectedCar) {}
     }
 }

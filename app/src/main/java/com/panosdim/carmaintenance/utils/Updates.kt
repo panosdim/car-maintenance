@@ -16,12 +16,10 @@ import com.panosdim.carmaintenance.CHANNEL_ID
 import com.panosdim.carmaintenance.R
 import com.panosdim.carmaintenance.TAG
 import com.panosdim.carmaintenance.model.FileMetadata
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 var refId: Long = -1
 
-@Suppress("DEPRECATION")
 fun checkForNewVersion(context: Context) {
     val storage = Firebase.storage
     val metadataFileName = "output-metadata.json"
@@ -75,12 +73,12 @@ private fun downloadNewVersion(context: Context, downloadUrl: Uri, version: Stri
     val manager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
     val request =
         DownloadManager.Request(downloadUrl)
-    request.setDescription("Downloading new version of Maintenance.")
-    request.setTitle("New Maintenance Version: $version")
+    request.setDescription("Downloading new version of Car Maintenance.")
+    request.setTitle("New Car Maintenance Version: $version")
     request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
     request.setDestinationInExternalPublicDir(
         Environment.DIRECTORY_DOWNLOADS,
-        "Maintenance-${version}.apk"
+        "Car-Maintenance-${version}.apk"
     )
     refId = manager.enqueue(request)
 }

@@ -17,30 +17,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.panosdim.carmaintenance.R
 import com.panosdim.carmaintenance.model.Car
-import com.panosdim.carmaintenance.model.KTEO
-import com.panosdim.carmaintenance.model.Service
-import com.panosdim.carmaintenance.model.Tyres
-import com.panosdim.carmaintenance.padding
-import com.panosdim.carmaintenance.ui.theme.CarMaintenanceTheme
+import com.panosdim.carmaintenance.paddingLarge
+import com.panosdim.carmaintenance.paddingSmall
 import com.panosdim.carmaintenance.utils.toLocalDate
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun KTEOCard(selectedCar: Car, updateCar: (car: Car) -> Unit) {
+fun KTEOCard(selectedCar: Car) {
     var openDialog by rememberSaveable { mutableStateOf(false) }
-    val redrawIcon = remember { mutableStateOf(false) }
 
     Box(contentAlignment = Alignment.TopEnd) {
         Card(
@@ -50,27 +44,26 @@ fun KTEOCard(selectedCar: Car, updateCar: (car: Car) -> Unit) {
         ) {
             Column(
                 modifier = Modifier
-                    .padding(padding)
+                    .padding(paddingLarge)
                     .fillMaxWidth()
             ) {
                 Text(
                     text = stringResource(R.string.kteo),
                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                    style = MaterialTheme.typography.displayMedium
+                    style = MaterialTheme.typography.displaySmall
                 )
-                Spacer(Modifier.padding(padding))
+                Spacer(Modifier.padding(paddingSmall))
                 Text(
                     selectedCar.kteo.date,
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     style = MaterialTheme.typography.headlineMedium
                 )
-                Spacer(Modifier.padding(padding))
+                Spacer(Modifier.padding(paddingLarge))
                 Text(
                     text = stringResource(R.string.exhaust_card),
                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                    style = MaterialTheme.typography.displaySmall
+                    style = MaterialTheme.typography.headlineLarge
                 )
-                Spacer(Modifier.padding(padding))
                 Text(
                     selectedCar.kteo.exhaustCard,
                     modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -82,12 +75,10 @@ fun KTEOCard(selectedCar: Car, updateCar: (car: Car) -> Unit) {
                 openDialog = openDialog,
                 closeDialog = { openDialog = false },
                 selectedCar = selectedCar
-            ) { updateCar(it); redrawIcon.value = !redrawIcon.value }
+            )
         }
 
-        if (redrawIcon.value) {
-            StatusIcon(selectedCar = selectedCar)
-        } else {
+        if (selectedCar.kteo.date.isNotEmpty()) {
             StatusIcon(selectedCar = selectedCar)
         }
     }
@@ -122,20 +113,5 @@ fun StatusIcon(selectedCar: Car) {
             contentDescription = null,
             tint = Color.Green
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun KTEOCardPreview() {
-    val selectedCar = Car(
-        name = "Test Car",
-        service = Service(date = "03-04-2023", odometer = "150000", nextService = "175000"),
-        tyres = Tyres(date = "23-07-2020", odometer = "42000", nextChange = "80000"),
-        kteo = KTEO(date = "15-06-2024", exhaustCard = "15-06-2023")
-    )
-
-    CarMaintenanceTheme {
-        KTEOCard(selectedCar) {}
     }
 }

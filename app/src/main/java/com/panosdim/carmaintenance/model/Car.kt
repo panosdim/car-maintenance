@@ -9,6 +9,6 @@ data class Car(
     var id: String? = null,
     var name: String = "",
     var service: Service = Service(),
-    var tyres: Tyres = Tyres(),
+    var tires: Tires = Tires(),
     var kteo: KTEO = KTEO()
 ) : Parcelable

@@ -1,21 +1,32 @@
 package com.panosdim.carmaintenance
 
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.panosdim.carmaintenance.model.Car
+import com.panosdim.carmaintenance.model.Response
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
 class Repository {
-    fun getCars(): Flow<List<Car>> {
-        return callbackFlow {
-            val carsRef = user?.let { database.getReference("cars").child(it.uid) }
+    private val user = Firebase.auth.currentUser
+    private val database = Firebase.database
+    private var listener: ValueEventListener? = null
+    private var carsRef: DatabaseReference? = null
 
-            val listener = carsRef?.addValueEventListener(object : ValueEventListener {
+    fun getCars(): Flow<Response<List<Car>>> {
+        return callbackFlow {
+            carsRef = user?.let { database.getReference("cars").child(it.uid) }
+
+            listener = carsRef?.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    trySend(Response.Loading)
                     val cars = mutableListOf<Car>()
                     snapshot.children.forEach { car ->
                         val item = car.getValue(Car::class.java)
@@ -25,18 +36,19 @@ class Repository {
                         }
                     }
                     // Emit the user data to the flow
-                    trySend(cars)
+                    trySend(Response.Success(cars))
                 }
 
                 override fun onCancelled(error: DatabaseError) {
+                    trySend(Response.Error(error.message))
                     cancel()
                 }
 
             })
 
             awaitClose {
-                if (listener != null) {
-                    carsRef.removeEventListener(listener)
+                listener?.let {
+                    carsRef?.removeEventListener(it)
                 }
             }
         }
@@ -59,5 +71,12 @@ class Repository {
 
         carsRef?.setValue(car)
         carsRef?.child("id")?.removeValue()
+    }
+
+    fun signOut() {
+        listener?.let {
+            carsRef?.removeEventListener(it)
+        }
+
     }
 }
