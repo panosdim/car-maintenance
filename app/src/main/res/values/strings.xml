@@ -51,4 +51,8 @@
     <string name="delete_car_dialog_description">Car will be deleted permanently and will not be able to recover it</string>
     <string name="confirm">Confirm</string>
     <string name="delete_toast">Car deleted successfully</string>
+    <string name="injector">Injector</string>
+    <string name="car_injector_title">Update Car Injector</string>
+    <string name="car_injector_message">Car Injector Updated Successfully</string>
+    <string name="car_injector_placeholder">Type current odometer</string>
 </resources>

@@ -10,5 +10,6 @@ data class Car(
     var name: String = "",
     var service: Service = Service(),
     var tires: Tires = Tires(),
-    var kteo: KTEO = KTEO()
+    var kteo: KTEO = KTEO(),
+    var injector: Injector = Injector()
 ) : Parcelable

@@ -2,7 +2,7 @@ package com.panosdim.carmaintenance.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CarRepair
+import androidx.compose.material.icons.outlined.MonitorHeart
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,8 +25,16 @@ import com.panosdim.carmaintenance.utils.getFormattedNumber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ServiceCard(selectedCar: Car) {
+fun InjectorCard(selectedCar: Car) {
     var openDialog by rememberSaveable { mutableStateOf(false) }
+
+    val nextInjectorService =
+        try {
+            (selectedCar.injector.odometer.toInt() + 160000).toString()
+        } catch (_: NumberFormatException) {
+            "160000"
+        }
+
 
     Card(
         onClick = { openDialog = true },
@@ -45,18 +53,20 @@ fun ServiceCard(selectedCar: Car) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    Icons.Outlined.CarRepair, contentDescription = null, modifier = Modifier.size(
+                    Icons.Outlined.MonitorHeart,
+                    contentDescription = null,
+                    modifier = Modifier.size(
                         MaterialTheme.typography.displaySmall.fontSize.value.dp
                     )
                 )
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                 Text(
-                    text = stringResource(R.string.service),
+                    text = stringResource(R.string.injector),
                     style = MaterialTheme.typography.displaySmall
                 )
             }
             Spacer(Modifier.padding(paddingSmall))
-            if (selectedCar.service.date.isNotEmpty()) {
+            if (selectedCar.injector.date.isNotEmpty()) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -65,11 +75,11 @@ fun ServiceCard(selectedCar: Car) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        selectedCar.service.date,
+                        selectedCar.injector.date,
                         style = MaterialTheme.typography.headlineMedium
                     )
                     Text(
-                        getFormattedNumber(selectedCar.service.odometer),
+                        getFormattedNumber(selectedCar.injector.odometer),
                         style = MaterialTheme.typography.headlineMedium
                     )
                 }
@@ -87,14 +97,14 @@ fun ServiceCard(selectedCar: Car) {
                 style = MaterialTheme.typography.headlineLarge
             )
             Text(
-                getFormattedNumber(selectedCar.service.nextService),
+                getFormattedNumber(nextInjectorService),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
         }
 
-        UpdateCarServiceDialog(
+        UpdateCarInjectorDialog(
             openDialog = openDialog,
             closeDialog = { openDialog = false },
             selectedCar = selectedCar

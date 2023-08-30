@@ -51,6 +51,8 @@ fun CarDetails(selectedCar: Car?) {
             Spacer(Modifier.padding(paddingLarge))
             KTEOCard(it)
             Spacer(Modifier.padding(paddingLarge))
+            InjectorCard(it)
+            Spacer(Modifier.padding(paddingLarge))
             FilledTonalButton(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = { openDeleteDialog.value = true },

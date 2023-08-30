@@ -8,11 +8,11 @@ fun getFormattedNumber(number: String): String {
     return if (number.isNotEmpty()) {
         try {
             val num = number.toInt()
-            numberFormat.format(num)
-        } catch (e: NumberFormatException) {
-            number
+            "${numberFormat.format(num)} km"
+        } catch (_: NumberFormatException) {
+            "$number km"
         }
     } else {
-        ""
+        "-"
     }
 }

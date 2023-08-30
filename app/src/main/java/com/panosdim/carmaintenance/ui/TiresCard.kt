@@ -18,10 +18,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -40,15 +38,13 @@ import com.panosdim.carmaintenance.utils.getFormattedNumber
 fun TiresCard(selectedCar: Car) {
     var openDialog by rememberSaveable { mutableStateOf(false) }
 
-    val frontBackChange = remember {
-        derivedStateOf {
-            try {
-                return@derivedStateOf (selectedCar.tires.odometer.toInt() + 20000).toString()
-            } catch (e: NumberFormatException) {
-                return@derivedStateOf ""
-            }
+    val nextTireSwap =
+        try {
+            (selectedCar.tires.odometer.toInt() + 20000).toString()
+        } catch (_: NumberFormatException) {
+            ""
         }
-    }
+
 
     Card(
         onClick = { openDialog = true },
@@ -78,19 +74,27 @@ fun TiresCard(selectedCar: Car) {
                 )
             }
             Spacer(Modifier.padding(paddingSmall))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(IntrinsicSize.Min),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            if (selectedCar.tires.date.isNotEmpty()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(IntrinsicSize.Min),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        selectedCar.tires.date,
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                    Text(
+                        getFormattedNumber(selectedCar.tires.odometer),
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                }
+            } else {
                 Text(
-                    selectedCar.tires.date,
-                    style = MaterialTheme.typography.headlineMedium
-                )
-                Text(
-                    "${getFormattedNumber(selectedCar.tires.odometer)} km",
+                    "-",
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
                     style = MaterialTheme.typography.headlineMedium
                 )
             }
@@ -101,7 +105,7 @@ fun TiresCard(selectedCar: Car) {
                 style = MaterialTheme.typography.headlineLarge
             )
             Text(
-                "${getFormattedNumber(frontBackChange.value)} km",
+                getFormattedNumber(nextTireSwap),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
@@ -113,7 +117,7 @@ fun TiresCard(selectedCar: Car) {
                 style = MaterialTheme.typography.headlineLarge
             )
             Text(
-                "${getFormattedNumber(selectedCar.tires.nextChange)} km",
+                getFormattedNumber(selectedCar.tires.nextChange),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
