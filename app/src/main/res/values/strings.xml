@@ -16,14 +16,14 @@
     <string name="add">Add</string>
     <string name="dismiss">Dismiss</string>
     <string name="add_new_car_message">New Car Added Successfully</string>
-    <string name="service">🛠️ Service</string>
+    <string name="service">Service</string>
     <string name="next_service">Next Service</string>
     <string name="update">Update</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="km">km</string>
     <string name="car_service_message">Car Service Updated Successfully</string>
-    <string name="tires">⚙️ Tires</string>
+    <string name="tires">Tires</string>
     <string name="next_change">Next Change</string>
     <string name="car_tires_title">Tires</string>
     <string name="car_tires_date">Tires Change Date</string>
@@ -32,7 +32,7 @@
     <string name="next_car_tires_next_placeholder">Type next tires change odometer</string>
     <string name="next_car_tires">Next Tires Change</string>
     <string name="car_tires_message">Car Tires Updated Successfully</string>
-    <string name="kteo">🏁 KTEO</string>
+    <string name="kteo">KTEO</string>
     <string name="exhaust_card">Exhaust Card</string>
     <string name="car_kteo_title">Update Car KTEO</string>
     <string name="car_kteo_date">KTEO Date</string>
@@ -45,5 +45,10 @@
     <string name="icon_password_visible">Password Visible</string>
     <string name="icon_password_hidden">Password Hidden</string>
     <string name="authentication_failed">Authentication failed</string>
-    <string name="next_front_back_change">Change front and back</string>
+    <string name="next_swap_tires">Next Swap</string>
+    <string name="delete_car">Delete Car</string>
+    <string name="delete_car_dialog_title">Delete Car?</string>
+    <string name="delete_car_dialog_description">Car will be deleted permanently and will not be able to recover it</string>
+    <string name="confirm">Confirm</string>
+    <string name="delete_toast">Car deleted successfully</string>
 </resources>

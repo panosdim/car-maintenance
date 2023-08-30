@@ -15,6 +15,10 @@ class MainViewModel : ViewModel() {
         repository.updateCar(car)
     }
 
+    fun deleteCar(car: Car) {
+        repository.deleteCar(car)
+    }
+
     fun signOut() {
         repository.signOut()
     }

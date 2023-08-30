@@ -73,6 +73,18 @@ class Repository {
         carsRef?.child("id")?.removeValue()
     }
 
+    fun deleteCar(car: Car) {
+        val carsRef = user?.let {
+            car.id?.let { id ->
+                database.getReference("cars").child(it.uid).child(
+                    id
+                )
+            }
+        }
+
+        carsRef?.removeValue()
+    }
+
     fun signOut() {
         listener?.let {
             carsRef?.removeEventListener(it)

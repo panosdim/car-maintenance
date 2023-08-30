@@ -1,14 +1,19 @@
 package com.panosdim.carmaintenance.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.NoCrash
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -47,11 +52,25 @@ fun KTEOCard(selectedCar: Car) {
                     .padding(paddingLarge)
                     .fillMaxWidth()
             ) {
-                Text(
-                    text = stringResource(R.string.kteo),
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    style = MaterialTheme.typography.displaySmall
-                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        Icons.Outlined.NoCrash,
+                        contentDescription = null,
+                        modifier = Modifier.size(
+                            MaterialTheme.typography.displaySmall.fontSize.value.dp
+                        )
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text(
+                        text = stringResource(R.string.kteo),
+                        style = MaterialTheme.typography.displaySmall
+                    )
+                }
                 Spacer(Modifier.padding(paddingSmall))
                 Text(
                     selectedCar.kteo.date,
