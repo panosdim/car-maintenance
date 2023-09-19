@@ -1,7 +1,6 @@
 package com.panosdim.carmaintenance.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
-data class KTEO(var date: String = "", var exhaustCard: String = "") : Parcelable
+@Serializable
+data class KTEO(var date: String = "", var exhaustCard: String = "")

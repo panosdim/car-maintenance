@@ -55,4 +55,8 @@
     <string name="car_injector_title">Update Car Injector</string>
     <string name="car_injector_message">Car Injector Updated Successfully</string>
     <string name="car_injector_placeholder">Type current odometer</string>
+    <string name="timing_belt">Timing Belt</string>
+    <string name="car_timing_belt_message">Car Timing Belt Updated Successfully</string>
+    <string name="car_timing_belt_title">Update Car Timing Belt</string>
+    <string name="car_timing_belt_placeholder">Type current odometer</string>
 </resources>

@@ -1,15 +1,15 @@
 package com.panosdim.carmaintenance.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 
-@Parcelize
+@Serializable
 data class Car(
     var id: String? = null,
     var name: String = "",
     var service: Service = Service(),
     var tires: Tires = Tires(),
     var kteo: KTEO = KTEO(),
-    var injector: Injector = Injector()
-) : Parcelable
+    var injector: Injector = Injector(),
+    var timingBelt: TimingBelt? = null,
+)

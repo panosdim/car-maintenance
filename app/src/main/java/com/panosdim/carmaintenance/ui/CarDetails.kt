@@ -53,6 +53,10 @@ fun CarDetails(selectedCar: Car?) {
             Spacer(Modifier.padding(paddingLarge))
             InjectorCard(it)
             Spacer(Modifier.padding(paddingLarge))
+            if (it.timingBelt != null) {
+                TimingBeltCard(it)
+                Spacer(Modifier.padding(paddingLarge))
+            }
             FilledTonalButton(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = { openDeleteDialog.value = true },
