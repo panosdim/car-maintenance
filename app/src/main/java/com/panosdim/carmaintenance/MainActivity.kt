@@ -32,10 +32,14 @@ import com.panosdim.carmaintenance.ui.theme.CarMaintenanceTheme
 import com.panosdim.carmaintenance.utils.checkForNewVersion
 import com.panosdim.carmaintenance.utils.createNotificationChannel
 import com.panosdim.carmaintenance.utils.refId
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
     private lateinit var manager: DownloadManager
+    private val scope = CoroutineScope(Dispatchers.IO)
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
@@ -86,7 +90,9 @@ class MainActivity : ComponentActivity() {
         FirebaseApp.initializeApp(this)
 
         // Check for new version
-        checkForNewVersion(this)
+        scope.launch {
+            checkForNewVersion(this@MainActivity)
+        }
 
         // Check for Notifications Permissions
         if (!NotificationManagerCompat.from(this).areNotificationsEnabled()) {
