@@ -7,9 +7,10 @@ import kotlinx.serialization.Serializable
 data class Car(
     var id: String? = null,
     var name: String = "",
+    var purchaseDate: String = "",
     var service: Service = Service(),
     var tires: Tires = Tires(),
     var kteo: KTEO = KTEO(),
     var injector: Injector = Injector(),
-    var timingBelt: TimingBelt? = null,
+    var timingBelt: TimingBelt = TimingBelt(),
 )

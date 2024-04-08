@@ -1,6 +1,7 @@
 package com.panosdim.carmaintenance.ui
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,6 +18,7 @@ import com.panosdim.carmaintenance.MainViewModel
 import com.panosdim.carmaintenance.R
 import com.panosdim.carmaintenance.model.Car
 import com.panosdim.carmaintenance.model.KTEO
+import com.panosdim.carmaintenance.paddingSmall
 import com.panosdim.carmaintenance.utils.toEpochMilli
 import com.panosdim.carmaintenance.utils.toFormattedString
 import com.panosdim.carmaintenance.utils.toLocalDate
@@ -27,7 +29,7 @@ import java.time.LocalDate
 fun UpdateCarKTEODialog(
     openDialog: Boolean,
     closeDialog: () -> Unit,
-    selectedCar: Car,
+    car: Car,
 ) {
     val context = LocalContext.current
     val viewModel: MainViewModel = viewModel()
@@ -35,10 +37,10 @@ fun UpdateCarKTEODialog(
     if (openDialog) {
         val date = remember {
             derivedStateOf {
-                if (selectedCar.kteo.date.isBlank()) {
+                if (car.kteo.date.isBlank()) {
                     return@derivedStateOf LocalDate.now().plusYears(2)
                 } else {
-                    return@derivedStateOf selectedCar.kteo.date.toLocalDate()
+                    return@derivedStateOf car.kteo.date.toLocalDate()
                 }
             }
         }
@@ -47,10 +49,10 @@ fun UpdateCarKTEODialog(
 
         val exhaustDate = remember {
             derivedStateOf {
-                if (selectedCar.kteo.exhaustCard.isBlank()) {
+                if (car.kteo.exhaustCard.isBlank()) {
                     return@derivedStateOf LocalDate.now().plusYears(1)
                 } else {
-                    return@derivedStateOf selectedCar.kteo.exhaustCard.toLocalDate()
+                    return@derivedStateOf car.kteo.exhaustCard.toLocalDate()
                 }
             }
         }
@@ -63,7 +65,7 @@ fun UpdateCarKTEODialog(
                 Text(text = stringResource(R.string.car_kteo_title))
             },
             text = {
-                Column {
+                Column(verticalArrangement = Arrangement.spacedBy(paddingSmall)) {
                     OutlinedDatePicker(
                         state = datePickerState,
                         label = stringResource(R.string.car_kteo_date)
@@ -88,9 +90,9 @@ fun UpdateCarKTEODialog(
                         }
 
                         if (newKTEO != null) {
-                            selectedCar.kteo = newKTEO
+                            car.kteo = newKTEO
 
-                            viewModel.updateCar(selectedCar)
+                            viewModel.updateCar(car)
 
                             Toast.makeText(
                                 context, R.string.car_kteo_message,

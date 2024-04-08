@@ -1,11 +1,22 @@
 package com.panosdim.carmaintenance.ui
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -14,6 +25,7 @@ import com.panosdim.carmaintenance.MainViewModel
 import com.panosdim.carmaintenance.R
 import com.panosdim.carmaintenance.model.Car
 import com.panosdim.carmaintenance.model.Service
+import com.panosdim.carmaintenance.paddingSmall
 import com.panosdim.carmaintenance.utils.toEpochMilli
 import com.panosdim.carmaintenance.utils.toFormattedString
 import com.panosdim.carmaintenance.utils.toLocalDate
@@ -24,32 +36,32 @@ import java.time.LocalDate
 fun UpdateCarServiceDialog(
     openDialog: Boolean,
     closeDialog: () -> Unit,
-    selectedCar: Car,
+    car: Car,
 ) {
     val context = LocalContext.current
     val viewModel: MainViewModel = viewModel()
 
     if (openDialog) {
         var carService by rememberSaveable {
-            if (selectedCar.service.odometer.isBlank()) {
+            if (car.service.odometer.isBlank()) {
                 return@rememberSaveable mutableStateOf("")
             } else {
-                return@rememberSaveable mutableStateOf(selectedCar.service.odometer)
+                return@rememberSaveable mutableStateOf(car.service.odometer)
             }
         }
         var nextCarService by rememberSaveable {
-            if (selectedCar.service.nextService.isBlank()) {
+            if (car.service.nextService.isBlank()) {
                 return@rememberSaveable mutableStateOf("")
             } else {
-                return@rememberSaveable mutableStateOf(selectedCar.service.nextService)
+                return@rememberSaveable mutableStateOf(car.service.nextService)
             }
         }
         val date = remember {
             derivedStateOf {
-                if (selectedCar.service.date.isBlank()) {
+                if (car.service.date.isBlank()) {
                     return@derivedStateOf LocalDate.now()
                 } else {
-                    return@derivedStateOf selectedCar.service.date.toLocalDate()
+                    return@derivedStateOf car.service.date.toLocalDate()
                 }
             }
         }
@@ -66,7 +78,7 @@ fun UpdateCarServiceDialog(
                 Text(text = stringResource(R.string.car_service_title))
             },
             text = {
-                Column {
+                Column(verticalArrangement = Arrangement.spacedBy(paddingSmall)) {
                     OutlinedDatePicker(
                         state = datePickerState,
                         label = stringResource(id = R.string.car_service_date)
@@ -120,9 +132,9 @@ fun UpdateCarServiceDialog(
                         }
 
                         if (newService != null) {
-                            selectedCar.service = newService
+                            car.service = newService
 
-                            viewModel.updateCar(selectedCar)
+                            viewModel.updateCar(car)
 
                             Toast.makeText(
                                 context, R.string.car_service_message,

@@ -33,7 +33,7 @@
     <string name="next_car_tires">Next Tires Change</string>
     <string name="car_tires_message">Car Tires Updated Successfully</string>
     <string name="kteo">KTEO</string>
-    <string name="exhaust_card">Exhaust Card</string>
+    <string name="exhaust_card">Exhaust</string>
     <string name="car_kteo_title">Update Car KTEO</string>
     <string name="car_kteo_date">KTEO Date</string>
     <string name="car_kteo_message">Car KTEO updated successfully</string>
@@ -59,4 +59,11 @@
     <string name="car_timing_belt_message">Car Timing Belt Updated Successfully</string>
     <string name="car_timing_belt_title">Update Car Timing Belt</string>
     <string name="car_timing_belt_placeholder">Type current odometer</string>
+    <string name="no_items">No cars found</string>
+    <string name="edit_car">Edit Car</string>
+    <string name="purchase_date">Purchase Date</string>
+    <string name="next_car_tires_swap_placeholder">Type next tires swap odometer</string>
+    <string name="next_car_tires_swap">Next Tires Swap</string>
+    <string name="car_update_title">Update Car</string>
+    <string name="update_car_message">Car updated successfully</string>
 </resources>
