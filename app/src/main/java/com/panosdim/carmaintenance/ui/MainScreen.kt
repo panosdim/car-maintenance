@@ -4,7 +4,6 @@ import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,7 +28,6 @@ import com.panosdim.carmaintenance.MainViewModel
 import com.panosdim.carmaintenance.R
 import com.panosdim.carmaintenance.model.Car
 import com.panosdim.carmaintenance.model.Response
-import com.panosdim.carmaintenance.paddingLarge
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -77,14 +75,11 @@ fun MainScreen() {
         LazyColumn(
             Modifier
                 .fillMaxWidth(),
-            contentPadding = PaddingValues(horizontal = paddingLarge, vertical = paddingLarge),
             state = listState
         ) {
             if (cars.isNotEmpty()) {
-                cars.iterator().forEachRemaining {
-                    item {
-                        CarCard(car = it)
-                    }
+                items(cars.size) { index ->
+                    CarCard(carResponse = carsResponse, index = index)
                 }
             } else {
                 item {

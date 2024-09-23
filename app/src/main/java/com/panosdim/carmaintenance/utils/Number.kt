@@ -13,6 +13,6 @@ fun getFormattedNumber(number: String): String {
             "$number km"
         }
     } else {
-        "-"
+        "20.000km"
     }
 }

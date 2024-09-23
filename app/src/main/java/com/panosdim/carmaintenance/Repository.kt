@@ -9,6 +9,8 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.panosdim.carmaintenance.model.Car
 import com.panosdim.carmaintenance.model.Response
+import com.panosdim.carmaintenance.utils.toFormattedString
+import com.panosdim.carmaintenance.utils.toLocalDate
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -55,6 +57,8 @@ class Repository {
     }
 
     fun addNewCar(car: Car) {
+        car.kteo.date = car.purchaseDate.toLocalDate().plusYears(4).toFormattedString()
+        car.kteo.exhaustCard = car.purchaseDate.toLocalDate().plusYears(4).toFormattedString()
         val carsRef = user?.let { database.getReference("cars").child(it.uid) }
 
         carsRef?.push()?.setValue(car)

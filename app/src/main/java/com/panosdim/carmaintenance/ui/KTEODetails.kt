@@ -4,16 +4,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.icons.outlined.NoCrash
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -43,8 +39,6 @@ fun KTEODetails(car: Car) {
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(Icons.Outlined.NoCrash, contentDescription = null, modifier = Modifier.size(48.dp))
-        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
         Column(modifier = Modifier.clickable(onClick = { openDialog = true })) {
             Row(
                 modifier = Modifier
@@ -57,7 +51,7 @@ fun KTEODetails(car: Car) {
                     style = MaterialTheme.typography.headlineMedium
                 )
                 if (car.kteo.date.isNotEmpty()) {
-                    StatusIcon(date = car.kteo.date.toLocalDate())
+                    KteoStatusIcon(date = car.kteo.date.toLocalDate())
                 }
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                     if (car.kteo.date.isNotEmpty()) {
@@ -84,7 +78,7 @@ fun KTEODetails(car: Car) {
                     style = MaterialTheme.typography.headlineSmall
                 )
                 if (car.kteo.exhaustCard.isNotEmpty()) {
-                    StatusIcon(date = car.kteo.exhaustCard.toLocalDate())
+                    KteoStatusIcon(date = car.kteo.exhaustCard.toLocalDate())
                 }
                 Text(
                     car.kteo.exhaustCard,
@@ -104,7 +98,7 @@ fun KTEODetails(car: Car) {
 }
 
 @Composable
-fun StatusIcon(date: LocalDate) {
+fun KteoStatusIcon(date: LocalDate) {
     if (date.isBefore(LocalDate.now())
     ) {
         Icon(

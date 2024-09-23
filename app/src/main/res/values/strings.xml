@@ -17,7 +17,6 @@
     <string name="dismiss">Dismiss</string>
     <string name="add_new_car_message">New Car Added Successfully</string>
     <string name="service">Service</string>
-    <string name="next_service">Next Service</string>
     <string name="update">Update</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
@@ -48,7 +47,7 @@
     <string name="next_swap_tires">Next Swap</string>
     <string name="delete_car">Delete Car</string>
     <string name="delete_car_dialog_title">Delete Car?</string>
-    <string name="delete_car_dialog_description">Car will be deleted permanently and will not be able to recover it</string>
+    <string name="delete_car_dialog_description">%1$s will be deleted permanently and will not be able to recover it</string>
     <string name="confirm">Confirm</string>
     <string name="delete_toast">Car deleted successfully</string>
     <string name="injector">Injector</string>
@@ -66,4 +65,7 @@
     <string name="next_car_tires_swap">Next Tires Swap</string>
     <string name="car_update_title">Update Car</string>
     <string name="update_car_message">Car updated successfully</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="swap_tires_performed">Swap Performed At</string>
 </resources>

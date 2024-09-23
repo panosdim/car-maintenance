@@ -4,13 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.MonitorHeart
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.panosdim.carmaintenance.R
 import com.panosdim.carmaintenance.model.Car
 import com.panosdim.carmaintenance.utils.getFormattedNumber
@@ -40,68 +33,52 @@ fun InjectorDetails(car: Car) {
             "160000"
         }
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            Icons.Outlined.MonitorHeart,
-            contentDescription = null,
-            modifier = Modifier.size(48.dp)
-        )
-        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-        Column(modifier = Modifier.clickable(onClick = { openDialog = true })) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(R.string.injector),
-                    style = MaterialTheme.typography.headlineMedium
-                )
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth(), horizontalAlignment = Alignment.End
-                ) {
-                    if (car.injector.date.isNotEmpty()) {
-                        Text(
-                            car.injector.date,
-                            style = MaterialTheme.typography.headlineSmall
-                        )
-                        Text(
-                            getFormattedNumber(car.injector.odometer),
-                            style = MaterialTheme.typography.headlineSmall
-                        )
-                    } else {
-                        Text(
-                            "-",
-                            style = MaterialTheme.typography.headlineSmall
-                        )
-                    }
+    Column(modifier = Modifier.clickable(onClick = { openDialog = true })) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(R.string.previous),
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Text(
+                text = stringResource(R.string.next),
+                style = MaterialTheme.typography.headlineMedium
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (car.injector.date.isNotEmpty()) {
+                Column {
+                    Text(
+                        car.injector.date,
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                    Text(
+                        getFormattedNumber(car.injector.odometer),
+                        style = MaterialTheme.typography.headlineSmall
+                    )
                 }
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            } else {
                 Text(
-                    text = stringResource(R.string.next_service),
+                    "-",
                     style = MaterialTheme.typography.headlineSmall
                 )
-                Text(
-                    getFormattedNumber(nextInjectorService),
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.End,
-                    fontWeight = FontWeight.Bold
-                )
             }
+            Text(
+                getFormattedNumber(nextInjectorService),
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.End,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 
