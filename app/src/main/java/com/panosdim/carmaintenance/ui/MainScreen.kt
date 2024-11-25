@@ -1,13 +1,16 @@
 package com.panosdim.carmaintenance.ui
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
@@ -29,16 +32,17 @@ import com.panosdim.carmaintenance.R
 import com.panosdim.carmaintenance.model.Car
 import com.panosdim.carmaintenance.model.Response
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen() {
     val context = LocalContext.current
     val viewModel: MainViewModel = viewModel()
-    val listState = rememberLazyListState()
     val carsResponse =
         viewModel.cars.collectAsStateWithLifecycle(initialValue = Response.Loading)
     var cars by remember { mutableStateOf(emptyList<Car>()) }
     rememberPagerState(pageCount = { cars.size })
+    var selectedCar by remember { mutableStateOf<Car?>(null) }
 
     var isLoading by remember {
         mutableStateOf(false)
@@ -50,6 +54,9 @@ fun MainScreen() {
 
             cars =
                 (carsResponse.value as Response.Success<List<Car>>).data
+            if (cars.isNotEmpty() && selectedCar == null) {
+                selectedCar = cars[0]
+            }
         }
 
         is Response.Error -> {
@@ -68,37 +75,58 @@ fun MainScreen() {
         }
     }
 
+    val onCarSelected: (Car) -> Unit = { car ->
+        selectedCar = car
+    }
+
     if (isLoading) {
         ProgressBar()
     } else {
-        // Show Flats
-        LazyColumn(
-            Modifier
-                .fillMaxWidth(),
-            state = listState
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .navigationBarsPadding()
+                .systemBarsPadding()
+                .imePadding(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
         ) {
             if (cars.isNotEmpty()) {
-                items(cars.size) { index ->
-                    CarCard(carResponse = carsResponse, index = index)
+                selectedCar?.let {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    ) {
+                        CarDetails(it, onCarDeleted = { selectedCar = null })
+                    }
+
                 }
             } else {
-                item {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            Icons.Default.Warning,
-                            contentDescription = stringResource(id = R.string.no_items),
-                            modifier = Modifier
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        Icons.Default.Warning,
+                        contentDescription = stringResource(id = R.string.no_items),
+                        modifier = Modifier
 
-                        )
-                        Text(
-                            text = stringResource(id = R.string.no_items)
-                        )
-                    }
+                    )
+                    Text(
+                        text = stringResource(id = R.string.no_items)
+                    )
                 }
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+            ) {
+                BottomCard(cars, onCarSelected)
             }
         }
     }
