@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.panosdim.carmaintenance.R
 import com.panosdim.carmaintenance.utils.toFormattedString
@@ -25,7 +26,8 @@ import com.panosdim.carmaintenance.utils.toLocalDate
 @Composable
 fun OutlinedDatePicker(
     state: DatePickerState,
-    label: String
+    label: String,
+    modifier: Modifier
 ) {
     val openDatePickerDialog = remember { mutableStateOf(false) }
     val source = remember { MutableInteractionSource() }
@@ -69,6 +71,7 @@ fun OutlinedDatePicker(
     }
 
     OutlinedTextField(
+        modifier = modifier,
         label = { Text(text = label) },
         readOnly = true,
         interactionSource = source,

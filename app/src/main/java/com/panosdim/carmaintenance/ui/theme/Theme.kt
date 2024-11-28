@@ -59,9 +59,12 @@ fun CarMaintenanceTheme(
             ?: throw Exception("Not in an activity - unable to get Window reference")
 
         SideEffect {
-            (view.context as Activity).window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(currentWindow, view).isAppearanceLightStatusBars =
-                darkTheme
+            // Set the status bar color
+            WindowCompat.getInsetsController(currentWindow, view).let { insetsController ->
+                insetsController.isAppearanceLightStatusBars = !darkTheme
+            }
+
+            currentWindow.statusBarColor = colorScheme.primary.toArgb() // Fallback for older APIs
         }
     }
 

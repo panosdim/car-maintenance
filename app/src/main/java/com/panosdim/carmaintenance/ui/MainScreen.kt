@@ -1,8 +1,6 @@
 package com.panosdim.carmaintenance.ui
 
-import android.annotation.SuppressLint
 import android.widget.Toast
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,8 +30,6 @@ import com.panosdim.carmaintenance.R
 import com.panosdim.carmaintenance.model.Car
 import com.panosdim.carmaintenance.model.Response
 
-@SuppressLint("UnusedBoxWithConstraintsScope")
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen() {
     val context = LocalContext.current
@@ -52,11 +48,14 @@ fun MainScreen() {
         is Response.Success -> {
             isLoading = false
 
+            cars = emptyList()
+            val oldSelectedCar = selectedCar
+            selectedCar = null
+
             cars =
                 (carsResponse.value as Response.Success<List<Car>>).data
-            if (cars.isNotEmpty() && selectedCar == null) {
-                selectedCar = cars[0]
-            }
+
+            selectedCar = cars.find { it.id == oldSelectedCar?.id } ?: cars.firstOrNull()
         }
 
         is Response.Error -> {
@@ -98,7 +97,7 @@ fun MainScreen() {
                             .fillMaxWidth()
                             .weight(1f)
                     ) {
-                        CarDetails(it, onCarDeleted = { selectedCar = null })
+                        CarDetails(it)
                     }
 
                 }

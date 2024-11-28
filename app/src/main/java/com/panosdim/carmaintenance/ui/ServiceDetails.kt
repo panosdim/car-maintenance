@@ -11,14 +11,16 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CarRepair
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -30,19 +32,26 @@ import com.panosdim.carmaintenance.model.Car
 import com.panosdim.carmaintenance.paddingLarge
 import com.panosdim.carmaintenance.paddingSmall
 import com.panosdim.carmaintenance.utils.getFormattedNumber
+import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ServiceDetails(car: Car) {
-    var openDialog by rememberSaveable { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
     val textSize = with(LocalDensity.current) {
         MaterialTheme.typography.headlineLarge.fontSize.toDp()
     }
+    val skipPartiallyExpanded by remember { mutableStateOf(true) }
+
+    val updateServiceSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = skipPartiallyExpanded
+    )
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = { openDialog = true })
+            .clickable(onClick = { scope.launch { updateServiceSheetState.show() } })
             .wrapContentHeight(),
         shape = MaterialTheme.shapes.medium,
     ) {
@@ -119,8 +128,7 @@ fun ServiceDetails(car: Car) {
     }
 
     UpdateCarServiceDialog(
-        openDialog = openDialog,
-        closeDialog = { openDialog = false },
+        bottomSheetState = updateServiceSheetState,
         car = car
     )
 }

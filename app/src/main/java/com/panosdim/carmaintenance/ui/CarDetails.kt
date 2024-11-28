@@ -15,18 +15,19 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -37,14 +38,21 @@ import com.panosdim.carmaintenance.R
 import com.panosdim.carmaintenance.model.Car
 import com.panosdim.carmaintenance.paddingLarge
 import com.panosdim.carmaintenance.paddingSmall
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CarDetails(car: Car, onCarDeleted: () -> Unit) {
+fun CarDetails(car: Car) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val viewModel: MainViewModel = viewModel()
     val openDeleteDialog = remember { mutableStateOf(false) }
-    var openDialog by rememberSaveable { mutableStateOf(false) }
     val verticalScrollState = rememberScrollState()
+    val skipPartiallyExpanded by remember { mutableStateOf(true) }
+
+    val updateCarSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = skipPartiallyExpanded
+    )
 
 
     Column(
@@ -66,21 +74,6 @@ fun CarDetails(car: Car, onCarDeleted: () -> Unit) {
             style = MaterialTheme.typography.headlineSmall
         )
         Spacer(Modifier.padding(paddingLarge))
-
-        Column(
-            modifier = Modifier
-                .verticalScroll(verticalScrollState)
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(paddingSmall)
-        ) {
-            ServiceDetails(car = car)
-            TiresDetails(car = car)
-            KTEODetails(car = car)
-            InjectorDetails(car = car)
-            TimingBeltDetails(car)
-        }
-
-        Spacer(modifier = Modifier.padding(paddingLarge))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -99,7 +92,7 @@ fun CarDetails(car: Car, onCarDeleted: () -> Unit) {
             }
 
             FilledTonalButton(
-                onClick = { openDialog = true },
+                onClick = { scope.launch { updateCarSheetState.show() } },
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding
             ) {
                 Icon(
@@ -111,11 +104,23 @@ fun CarDetails(car: Car, onCarDeleted: () -> Unit) {
                 Text(stringResource(id = R.string.edit_car))
             }
         }
+        Spacer(modifier = Modifier.padding(paddingLarge))
+        Column(
+            modifier = Modifier
+                .verticalScroll(verticalScrollState)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(paddingSmall)
+        ) {
+            ServiceDetails(car = car)
+            TiresDetails(car = car)
+            KTEODetails(car = car)
+            InjectorDetails(car = car)
+            TimingBeltDetails(car)
+        }
     }
 
     UpdateCarDialog(
-        openDialog = openDialog,
-        closeDialog = { openDialog = false },
+        bottomSheetState = updateCarSheetState,
         car = car
     )
 
@@ -140,7 +145,7 @@ fun CarDetails(car: Car, onCarDeleted: () -> Unit) {
                     onClick = {
                         openDeleteDialog.value = false
                         viewModel.deleteCar(car)
-                        onCarDeleted()
+
                         Toast.makeText(
                             context, R.string.delete_toast,
                             Toast.LENGTH_LONG
