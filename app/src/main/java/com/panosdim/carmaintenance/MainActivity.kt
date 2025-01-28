@@ -71,15 +71,11 @@ class MainActivity : ComponentActivity() {
 
             }
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(
-                onComplete,
-                IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
-                RECEIVER_EXPORTED
-            )
-        } else {
-            registerReceiver(onComplete, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
-        }
+        registerReceiver(
+            onComplete,
+            IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
+            RECEIVER_EXPORTED
+        )
 
         // Initialize Firebase
         createNotificationChannel(this)
@@ -105,7 +101,7 @@ class MainActivity : ComponentActivity() {
         // Then enqueue the recurring task:
         WorkManager.getInstance(this@MainActivity).enqueueUniquePeriodicWork(
             "CarExpired",
-            ExistingPeriodicWorkPolicy.KEEP,
+            ExistingPeriodicWorkPolicy.UPDATE,
             expiredWork
         )
 
