@@ -28,10 +28,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.panosdim.carmaintenance" />
-                  <option name="mobileSdkAppId" value="1:890228106303:android:57556b624d9b6c2d62848a" />
-                  <option name="projectId" value="car-maintenance-e8324" />
-                  <option name="projectNumber" value="890228106303" />
+                  <option name="appId" value="PLACEHOLDER" />
+                  <option name="mobileSdkAppId" value="" />
+                  <option name="projectId" value="" />
+                  <option name="projectNumber" value="" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
