@@ -5,7 +5,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.24'
     id 'com.google.firebase.crashlytics'
-    id 'org.jetbrains.kotlin.plugin.compose' version '2.1.0'
+    id 'org.jetbrains.kotlin.plugin.compose' version '2.3.20'
 }
 
 android {
