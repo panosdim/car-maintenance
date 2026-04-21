@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
             }
 
         // Handle new version installation after the download of APK file.
-        manager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        manager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         onComplete = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 val referenceId = intent!!.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)

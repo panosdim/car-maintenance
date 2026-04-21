@@ -10,7 +10,6 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
@@ -49,12 +48,10 @@ fun CarMaintenanceTheme(
             ?: throw Exception("Not in an activity - unable to get Window reference")
 
         SideEffect {
-            // Set the status bar color
+            // Set the status bar appearance
             WindowCompat.getInsetsController(currentWindow, view).let { insetsController ->
                 insetsController.isAppearanceLightStatusBars = !darkTheme
             }
-
-            currentWindow.statusBarColor = colorScheme.primary.toArgb() // Fallback for older APIs
         }
     }
 

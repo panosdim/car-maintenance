@@ -60,7 +60,7 @@ fun AddNewCarDialog(
 
     if (bottomSheetState.isVisible) {
         var carName by rememberSaveable { mutableStateOf("") }
-        val focusRequester = FocusRequester()
+        val focusRequester = remember { FocusRequester() }
 
         val date = remember { LocalDate.now() }
         val datePickerState =

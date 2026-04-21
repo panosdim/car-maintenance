@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,8 +38,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.panosdim.carmaintenance.LoginActivity
 import com.panosdim.carmaintenance.MainViewModel
 import com.panosdim.carmaintenance.R
@@ -69,26 +70,18 @@ fun MainScreen() {
         skipPartiallyExpanded = skipPartiallyExpanded
     )
 
-    when (carsResponse.value) {
+    when (val response = carsResponse.value) {
         is Response.Success -> {
             isLoading = false
-
-            cars = emptyList()
-            cars =
-                (carsResponse.value as Response.Success<List<Car>>).data
-
-            val oldSelectedCar = selectedCar
-            selectedCar = null
-            selectedCar = cars.find { it.id == oldSelectedCar?.id }
+            cars = response.data
         }
 
         is Response.Error -> {
             Toast.makeText(
                 context,
-                (carsResponse.value as Response.Error).errorMessage,
+                response.errorMessage,
                 Toast.LENGTH_SHORT
-            )
-                .show()
+            ).show()
 
             isLoading = false
         }
@@ -96,6 +89,10 @@ fun MainScreen() {
         is Response.Loading -> {
             isLoading = true
         }
+    }
+
+    LaunchedEffect(cars) {
+        selectedCar = cars.find { it.id == selectedCar?.id }
     }
 
     if (isLoading) {
@@ -139,6 +136,7 @@ fun MainScreen() {
                         actions = {
                             IconButton(onClick = {
                                 context.unregisterReceiver(onComplete)
+                                viewModel.signOut()
                                 Firebase.auth.signOut()
 
                                 val intent = Intent(context, LoginActivity::class.java)

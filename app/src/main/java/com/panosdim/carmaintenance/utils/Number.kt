@@ -4,7 +4,7 @@ import java.text.NumberFormat
 import java.util.Locale
 
 fun getFormattedNumber(number: String): String {
-    val numberFormat = NumberFormat.getNumberInstance(Locale("el", "GR"))
+    val numberFormat = NumberFormat.getNumberInstance(Locale.forLanguageTag("el-GR"))
     return if (number.isNotEmpty()) {
         try {
             val num = number.toInt()

@@ -61,7 +61,7 @@ fun UpdateCarDialog(
 
     if (bottomSheetState.isVisible) {
         var carName by rememberSaveable { mutableStateOf(car.name) }
-        val focusRequester = FocusRequester()
+        val focusRequester = remember { FocusRequester() }
 
         val date = remember { car.purchaseDate.toLocalDate() }
         val datePickerState =
